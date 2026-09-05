@@ -6,7 +6,6 @@
 # Dependencies
 # ---------------------------------------------------------------
 node_modules/
-
 backend/node_modules/
 .pnp
 .pnp.*
