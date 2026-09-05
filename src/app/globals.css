@@ -24,3 +24,220 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ==========================================================================
+   Print / Save as PDF
+   Turns a report screen into an A4 document: app chrome, filters and buttons
+   drop out, the letterhead and footer appear, and tables repeat their headers
+   across pages.
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 16mm 14mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0b0b0b;
+    font-size: 10.5pt;
+    /* Keep chart fills and status colours in the PDF */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+  }
+
+  /* The report body fills the page - no app padding, no rounded cards */
+  main {
+    padding: 0 !important;
+  }
+
+  .report-document [class*="rounded-"] {
+    border-radius: 0 !important;
+  }
+
+  .report-document section,
+  .report-document .border {
+    border-color: #d5d4cf !important;
+  }
+
+  /* ---------- letterhead ---------- */
+  .report-letterhead {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0b0b0b;
+  }
+
+  .report-letterhead-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .report-org {
+    margin: 0;
+    font-size: 15pt;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0b0b0b;
+  }
+
+  .report-org-tagline {
+    margin: 1px 0 0;
+    font-size: 8.5pt;
+    color: #52514e;
+  }
+
+  .report-stamp {
+    text-align: right;
+  }
+
+  .report-doc-type {
+    margin: 0;
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #52514e;
+  }
+
+  .report-doc-date {
+    margin: 2px 0 0;
+    font-size: 8.5pt;
+    color: #52514e;
+  }
+
+  .report-title {
+    margin: 12px 0 0;
+    font-size: 17pt;
+    font-weight: 700;
+    color: #0b0b0b;
+  }
+
+  .report-subtitle {
+    margin: 2px 0 0;
+    font-size: 10pt;
+    color: #52514e;
+  }
+
+  .report-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px 16px;
+    margin: 12px 0 0;
+    padding: 8px 0 0;
+    border-top: 1px solid #e1e0d9;
+  }
+
+  .report-meta-item dt {
+    margin: 0;
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #898781;
+  }
+
+  .report-meta-item dd {
+    margin: 1px 0 0;
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: #0b0b0b;
+  }
+
+  /* ---------- body ---------- */
+  .report-block,
+  figure,
+  table {
+    break-inside: avoid;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+  }
+
+  /* Header row repeats at the top of every printed page */
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-row-group;
+  }
+
+  tr {
+    break-inside: avoid;
+    break-after: auto;
+  }
+
+  th,
+  td {
+    padding: 4px 8px !important;
+    border-bottom: 1px solid #e1e0d9;
+  }
+
+  thead th {
+    background: #f2f1ee !important;
+    color: #0b0b0b !important;
+    border-bottom: 1px solid #c3c2b7;
+  }
+
+  tfoot td {
+    border-top: 1px solid #c3c2b7;
+    font-weight: 700;
+  }
+
+  /* Money columns line up */
+  td[class*="text-right"],
+  th[class*="text-right"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- footer ---------- */
+  .report-footer {
+    margin-top: 18px;
+    padding-top: 10px;
+    border-top: 1px solid #c3c2b7;
+    break-inside: avoid;
+  }
+
+  .report-basis {
+    margin: 0;
+    font-size: 8.5pt;
+    color: #52514e;
+  }
+
+  .report-signoff {
+    display: flex;
+    gap: 48px;
+    margin-top: 28px;
+  }
+
+  .report-signline {
+    flex: 1;
+    max-width: 220px;
+    border-top: 1px solid #0b0b0b;
+    padding-top: 4px;
+    font-size: 8.5pt;
+    color: #52514e;
+  }
+
+  .report-confidential {
+    margin: 20px 0 0;
+    padding-top: 6px;
+    border-top: 1px solid #e1e0d9;
+    font-size: 7.5pt;
+    color: #898781;
+    text-align: center;
+  }
+}

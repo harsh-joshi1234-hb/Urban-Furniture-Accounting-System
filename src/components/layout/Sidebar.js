@@ -98,7 +98,7 @@ export default function Sidebar({ role, open, onClose }) {
   return (
     <>
       {/* Desktop / tablet */}
-      <aside className="hidden w-60 shrink-0 bg-slate-900 lg:block">{content}</aside>
+      <aside className="hidden w-60 shrink-0 bg-slate-900 lg:block print:hidden">{content}</aside>
 
       {/* Mobile drawer */}
       {open && (

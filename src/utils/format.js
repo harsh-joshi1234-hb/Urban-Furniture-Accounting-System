@@ -10,6 +10,18 @@ export function formatCurrency(value) {
   }).format(amount);
 }
 
+/** Short currency for chart labels, where a full INR string would not fit. */
+export function formatCompactCurrency(value) {
+  const amount = Number(value ?? 0);
+  if (Number.isNaN(amount)) return '-';
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(amount);
+}
+
 export function formatNumber(value, digits = 2) {
   const amount = Number(value ?? 0);
   if (Number.isNaN(amount)) return '-';
