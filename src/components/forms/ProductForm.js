@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { TextField, SelectField, CheckboxField } from '@/components/ui/Field';
+import ImageInput from '@/components/ui/ImageInput';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { FormError } from '@/components/ui/ErrorState';
@@ -112,11 +113,10 @@ export default function ProductForm({
               Manage categories
             </Link>
           </div>
-          <TextField
-            label="Image URL"
-            name="imageUrl"
-            value={form.imageUrl || ''}
-            onChange={update('imageUrl')}
+          <ImageInput
+            label="Product Image"
+            value={form.imageUrl}
+            onChange={(val) => setForm((curr) => ({ ...curr, imageUrl: val }))}
           />
           <TextField
             label="Sales Price"

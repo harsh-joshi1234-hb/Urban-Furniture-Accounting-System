@@ -20,7 +20,8 @@
     "express": "^5.2.1",
     "helmet": "^8.3.0",
     "joi": "^18.2.8",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.3.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",

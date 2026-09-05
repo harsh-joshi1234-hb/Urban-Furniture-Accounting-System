@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { TextField, SelectField } from '@/components/ui/Field';
+import ImageInput from '@/components/ui/ImageInput';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { FormError } from '@/components/ui/ErrorState';
@@ -95,14 +96,13 @@ export default function ContactForm({ initial, onSubmit, submitting, error, onCa
             value={form.phone || ''}
             onChange={update('phone')}
           />
-          <TextField
-            label="Image URL"
-            name="imageUrl"
-            className="sm:col-span-2"
-            value={form.imageUrl || ''}
-            hint="Paste a link to the contact image"
-            onChange={update('imageUrl')}
-          />
+          <div className="sm:col-span-2">
+            <ImageInput
+              label="Contact Image"
+              value={form.imageUrl}
+              onChange={(val) => setForm((curr) => ({ ...curr, imageUrl: val }))}
+            />
+          </div>
         </div>
       </Card>
 

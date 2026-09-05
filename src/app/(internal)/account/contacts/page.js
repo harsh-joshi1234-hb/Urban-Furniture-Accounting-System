@@ -11,11 +11,14 @@ import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { TextField, SelectField } from '@/components/ui/Field';
+import ViewToggle from '@/components/ui/ViewToggle';
+import KanbanBoard from '@/components/ui/KanbanBoard';
 
 export default function ContactsPage() {
   const router = useRouter();
   const [type, setType] = useState('');
   const [search, setSearch] = useState('');
+  const [viewMode, setViewMode] = useState('list');
 
   const { data, loading, error, reload } = useApiResource(
     () => contactService.list(type ? { type } : undefined),
@@ -63,9 +66,12 @@ export default function ContactsPage() {
         title="Contacts"
         subtitle="Customers and vendors used across sales and purchase."
         actions={
-          <Link href="/account/contacts/new">
-            <Button>New</Button>
-          </Link>
+          <div className="flex items-center gap-3">
+            <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+            <Link href="/account/contacts/new">
+              <Button>New</Button>
+            </Link>
+          </div>
         }
       />
 
@@ -93,25 +99,71 @@ export default function ContactsPage() {
           />
         </div>
 
-        <Table
-          columns={columns}
-          rows={rows}
-          loading={loading}
-          error={error}
-          onRetry={reload}
-          onRowClick={(row) => router.push(`/account/contacts/${row.id}`)}
-          emptyTitle="No contacts found"
-          emptyDescription={
-            search || type
-              ? 'No contact matches the current filters.'
-              : 'Create your first customer or vendor.'
-          }
-          emptyAction={
-            <Link href="/account/contacts/new">
-              <Button size="sm">New contact</Button>
-            </Link>
-          }
-        />
+        {viewMode === 'list' ? (
+          <Table
+            columns={columns}
+            rows={rows}
+            loading={loading}
+            error={error}
+            onRetry={reload}
+            onRowClick={(row) => router.push(`/account/contacts/${row.id}`)}
+            emptyTitle="No contacts found"
+            emptyDescription={
+              search || type
+                ? 'No contact matches the current filters.'
+                : 'Create your first customer or vendor.'
+            }
+            emptyAction={
+              <Link href="/account/contacts/new">
+                <Button size="sm">New contact</Button>
+              </Link>
+            }
+          />
+        ) : (
+          <KanbanBoard
+            rows={rows}
+            loading={loading}
+            error={error}
+            onRetry={reload}
+            onRowClick={(row) => router.push(`/account/contacts/${row.id}`)}
+            emptyTitle="No contacts found"
+            emptyDescription={
+              search || type
+                ? 'No contact matches the current filters.'
+                : 'Create your first customer or vendor.'
+            }
+            emptyAction={
+              <Link href="/account/contacts/new">
+                <Button size="sm">New contact</Button>
+              </Link>
+            }
+            renderCard={(row) => (
+              <div className="flex items-start gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded bg-slate-100 text-slate-400 overflow-hidden">
+                  {row.imageUrl ? (
+                    <img src={row.imageUrl} alt={row.name} className="h-full w-full object-cover" />
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between mb-1">
+                    <h3 className="truncate font-semibold text-slate-900">{row.name}</h3>
+                  </div>
+                  <p className="truncate text-sm text-slate-500">{row.email || '-'}</p>
+                  <p className="truncate text-sm text-slate-500">{row.phone || '-'}</p>
+                  <div className="mt-2 flex">
+                    <Badge tone={row.type === 'CUSTOMER' ? 'indigo' : 'amber'}>
+                      {row.type === 'CUSTOMER' ? 'Customer' : 'Vendor'}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        )}
       </Card>
     </div>
   );

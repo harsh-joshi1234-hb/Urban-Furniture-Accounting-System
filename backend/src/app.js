@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const env = require('./config/env');
@@ -26,6 +27,7 @@ const journalRoutes = require('./routes/journal.routes');
 const journalEntryRoutes = require('./routes/journalEntry.routes');
 const reportRoutes = require('./routes/report.routes');
 const portalRoutes = require('./routes/portal.routes');
+const uploadRoutes = require('./routes/upload.routes');
 
 const app = express();
 
@@ -36,6 +38,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Request logging for development
 if (env.NODE_ENV === 'development') {
@@ -65,6 +70,7 @@ app.use('/api/journals', journalRoutes);
 app.use('/api/journal-entries', journalEntryRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/portal', portalRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Global Handlers
 app.use(notFoundHandler);

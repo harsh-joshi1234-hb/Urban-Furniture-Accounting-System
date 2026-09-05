@@ -11,6 +11,8 @@ import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { TextField, SelectField } from '@/components/ui/Field';
+import ViewToggle from '@/components/ui/ViewToggle';
+import KanbanBoard from '@/components/ui/KanbanBoard';
 import { formatCurrency } from '@/utils/format';
 import { PRODUCT_TYPES } from '@/utils/constants';
 
@@ -18,6 +20,7 @@ export default function ProductsPage() {
   const router = useRouter();
   const [filters, setFilters] = useState({ categoryId: '', productType: '' });
   const [search, setSearch] = useState('');
+  const [viewMode, setViewMode] = useState('list');
 
   const products = useApiResource(
     () =>
@@ -64,14 +67,15 @@ export default function ProductsPage() {
         title="Products"
         subtitle="Goods, services and combos sold or purchased."
         actions={
-          <>
+          <div className="flex items-center gap-3">
+            <ViewToggle viewMode={viewMode} onChange={setViewMode} />
             <Link href="/account/product-categories">
               <Button variant="secondary">Categories</Button>
             </Link>
             <Link href="/account/products/new">
               <Button>New</Button>
             </Link>
-          </>
+          </div>
         }
       />
 
@@ -108,21 +112,66 @@ export default function ProductsPage() {
           />
         </div>
 
-        <Table
-          columns={columns}
-          rows={rows}
-          loading={products.loading}
-          error={products.error}
-          onRetry={products.reload}
-          onRowClick={(row) => router.push(`/account/products/${row.id}`)}
-          emptyTitle="No products found"
-          emptyDescription="Create a product to use it on orders, invoices and bills."
-          emptyAction={
-            <Link href="/account/products/new">
-              <Button size="sm">New product</Button>
-            </Link>
-          }
-        />
+        {viewMode === 'list' ? (
+          <Table
+            columns={columns}
+            rows={rows}
+            loading={products.loading}
+            error={products.error}
+            onRetry={products.reload}
+            onRowClick={(row) => router.push(`/account/products/${row.id}`)}
+            emptyTitle="No products found"
+            emptyDescription="Create a product to use it on orders, invoices and bills."
+            emptyAction={
+              <Link href="/account/products/new">
+                <Button size="sm">New product</Button>
+              </Link>
+            }
+          />
+        ) : (
+          <KanbanBoard
+            rows={rows}
+            loading={products.loading}
+            error={products.error}
+            onRetry={products.reload}
+            onRowClick={(row) => router.push(`/account/products/${row.id}`)}
+            emptyTitle="No products found"
+            emptyDescription="Create a product to use it on orders, invoices and bills."
+            emptyAction={
+              <Link href="/account/products/new">
+                <Button size="sm">New product</Button>
+              </Link>
+            }
+            renderCard={(row) => (
+              <div className="flex items-start gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded bg-slate-100 text-slate-400 overflow-hidden">
+                  {row.imageUrl ? (
+                    <img src={row.imageUrl} alt={row.name} className="h-full w-full object-cover" />
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-8 w-8">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between mb-1">
+                    <h3 className="truncate font-semibold text-slate-900">{row.name}</h3>
+                  </div>
+                  <div className="mt-2 space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500">Sales Price:</span>
+                      <span className="font-medium text-slate-900">{formatCurrency(row.salesPrice)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500">Cost:</span>
+                      <span className="font-medium text-slate-900">{formatCurrency(row.cost)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        )}
       </Card>
     </div>
   );
