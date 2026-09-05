@@ -36,6 +36,7 @@ export const INTERNAL_NAV = [
       { label: 'Chart of Account', href: '/account/chart-of-accounts' },
       { label: 'Journals', href: '/account/journals' },
       { label: 'Journal Entries', href: '/account/journal-entries' },
+      { label: 'Ledger', href: '/account/ledger' },
     ],
   },
   {

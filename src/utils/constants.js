@@ -19,6 +19,10 @@ export const INVOICE_STATUSES = [
   'CANCELLED',
 ];
 
+export const BUDGET_STATUSES = ['DRAFT', 'CONFIRMED', 'REVISED', 'CANCELLED'];
+export const JOURNAL_TYPES = ['SALES', 'PURCHASE', 'BANK', 'CASH'];
+export const ENTRY_STATUSES = ['DRAFT', 'POSTED', 'CANCELLED'];
+
 export const ACCOUNT_TYPES = [
   'ASSET',
   'LIABILITY',
