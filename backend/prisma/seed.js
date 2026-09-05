@@ -9,6 +9,12 @@ const ALL_PERMISSIONS = [
   { code: 'user.read', name: 'Read User', module: 'Auth' },
   { code: 'user.update', name: 'Update User', module: 'Auth' },
   { code: 'user.deactivate', name: 'Deactivate User', module: 'Auth' },
+  // Sales Orders
+  { code: 'sales_order.create', name: 'Create Sales Order', module: 'Sales' },
+  { code: 'sales_order.read', name: 'Read Sales Order', module: 'Sales' },
+  { code: 'sales_order.update', name: 'Update Sales Order', module: 'Sales' },
+  { code: 'sales_order.confirm', name: 'Confirm Sales Order', module: 'Sales' },
+  { code: 'sales_order.cancel', name: 'Cancel Sales Order', module: 'Sales' },
   
   // Invoices
   { code: 'invoice.create', name: 'Create Invoice', module: 'Sales' },
@@ -163,6 +169,18 @@ async function main() {
       console.log(`Created user ${u.loginId}`);
     }
   }
+
+  // 5. Seed Chart of Account (For testing Invoices)
+  const salesAccount = await prisma.chartOfAccount.upsert({
+    where: { code: '400000' },
+    update: {},
+    create: {
+      code: '400000',
+      name: 'Product Sales',
+      type: 'INCOME',
+    },
+  });
+  console.log(`Ensured ChartOfAccount ${salesAccount.code} exists.`);
 
   console.log('Seed completed successfully.');
 }
