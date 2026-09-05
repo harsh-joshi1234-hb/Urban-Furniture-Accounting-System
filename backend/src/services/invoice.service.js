@@ -110,14 +110,14 @@ const getInvoices = async (filters) => {
   if (filters.customerId) where.customerId = filters.customerId;
   return await prisma.customerInvoice.findMany({
     where,
-    include: { customer: true, lines: true }
+    include: { customer: true, lines: true, allocations: true }
   });
 };
 
 const getInvoiceById = async (id) => {
   return await prisma.customerInvoice.findUnique({
     where: { id },
-    include: { customer: true, lines: { include: { product: true } } }
+    include: { customer: true, lines: { include: { product: true } }, allocations: { include: { payment: true } }, salesOrder: true }
   });
 };
 

@@ -10,6 +10,7 @@ const errorHandler = require('./middleware/error.middleware');
 const healthRoutes = require('./routes/health.routes');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
+const roleRoutes = require('./routes/role.routes');
 const contactRoutes = require('./routes/contact.routes');
 const productCategoryRoutes = require('./routes/productCategory.routes');
 const productRoutes = require('./routes/product.routes');
@@ -48,6 +49,7 @@ if (env.NODE_ENV === 'development') {
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/roles', roleRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/product-categories', productCategoryRoutes);
 app.use('/api/products', productRoutes);

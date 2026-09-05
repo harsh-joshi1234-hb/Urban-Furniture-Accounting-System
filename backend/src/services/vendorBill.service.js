@@ -107,14 +107,14 @@ const getBills = async (filters) => {
   if (filters.vendorId) where.vendorId = filters.vendorId;
   return await prisma.vendorBill.findMany({
     where,
-    include: { vendor: true, lines: true }
+    include: { vendor: true, lines: true, allocations: true }
   });
 };
 
 const getBillById = async (id) => {
   return await prisma.vendorBill.findUnique({
     where: { id },
-    include: { vendor: true, lines: { include: { product: true } } }
+    include: { vendor: true, lines: { include: { product: true } }, allocations: { include: { payment: true } }, purchaseOrder: true }
   });
 };
 

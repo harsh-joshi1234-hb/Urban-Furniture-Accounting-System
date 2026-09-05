@@ -1,3 +1,5 @@
+const prisma = require('../config/prisma');
+
 const requireRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !req.user.role) {
@@ -27,10 +29,8 @@ const requirePermission = (permissionCode) => {
       });
     }
 
-    // Usually permissions can be fetched alongside user role, or cached
-    const { PrismaClient } = require('@prisma/client');
-    const prisma = new PrismaClient();
-
+    // Reuse the shared client - instantiating PrismaClient per request
+    // exhausts the Postgres connection pool.
     const roleWithPermissions = await prisma.role.findUnique({
       where: { id: req.user.roleId },
       include: {
