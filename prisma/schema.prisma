@@ -45,7 +45,21 @@ enum EntryStatus {
   CANCELLED
 }
 
+enum OrderStatus {
+  DRAFT
+  CONFIRMED
+  CANCELLED
+}
+
 enum InvoiceStatus {
+  DRAFT
+  CONFIRMED
+  PARTIALLY_PAID
+  PAID
+  CANCELLED
+}
+
+enum BillStatus {
   DRAFT
   CONFIRMED
   PARTIALLY_PAID
@@ -96,28 +110,34 @@ enum SourceType {
   MANUAL
 }
 
+enum PaymentDocumentType {
+  CUSTOMER_INVOICE
+  VENDOR_BILL
+}
+
 // ------------------------------------------------------
 // AUTH & RBAC (5 Tables)
 // ------------------------------------------------------
 model User {
-  id               String          @id @default(uuid())
-  name             String
-  loginId          String          @unique // 6-12 chars
-  email            String          @unique
-  passwordHash     String
-  roleId           String
-  role             Role            @relation(fields: [roleId], references: [id])
-  isActive         Boolean         @default(true)
-  lastLoginAt      DateTime?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  customerMappings CustomerUser[]
-  auditLogs        AuditLog[]
-  createdSO        SalesOrder[]    @relation("CreatedByUser")
-  createdINV       CustomerInvoice[] @relation("CreatedByUser")
-  createdPO        PurchaseOrder[] @relation("CreatedByUser")
-  createdBILL      VendorBill[]    @relation("CreatedByUser")
-  createdPAY       Payment[]       @relation("CreatedByUser")
+  id                   String               @id @default(uuid())
+  name                 String
+  loginId              String               @unique // 6-12 chars
+  email                String               @unique
+  passwordHash         String
+  roleId               String
+  role                 Role                 @relation(fields: [roleId], references: [id])
+  isActive             Boolean              @default(true)
+  lastLoginAt          DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  customerMappings     CustomerUser[]
+  auditLogs            AuditLog[]
+  createdSO            SalesOrder[]         @relation("CreatedByUser")
+  createdINV           CustomerInvoice[]    @relation("CreatedByUser")
+  createdPO            PurchaseOrder[]      @relation("CreatedByUser")
+  createdBILL          VendorBill[]         @relation("CreatedByUser")
+  createdPAY           Payment[]            @relation("CreatedByUser")
+  passwordResetTokens  PasswordResetToken[]
 }
 
 model Role {
@@ -145,11 +165,13 @@ model RolePermission {
 }
 
 model PasswordResetToken {
-  id        String   @id @default(uuid())
-  email     String
-  token     String   @unique
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
   expiresAt DateTime
-  createdAt DateTime @default(now())
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
 }
 
 // ------------------------------------------------------
@@ -161,7 +183,7 @@ model Contact {
   type         ContactType
   imageUrl     String?
   phone        String?
-  email        String?
+  email        String?              @unique
   street       String?
   city         String?
   state        String?
@@ -211,8 +233,8 @@ model Product {
   categoryId   String
   category     ProductCategory       @relation(fields: [categoryId], references: [id])
   productType  ProductType           @default(GOODS)
-  salesPrice   Float
-  cost         Float
+  salesPrice   Decimal
+  cost         Decimal
   imageUrl     String?
   isActive     Boolean               @default(true)
   createdAt    DateTime              @default(now())
@@ -263,7 +285,7 @@ model Budget {
   type                 BudgetType      @default(EXPENSE)
   startDate            DateTime
   endDate              DateTime
-  committedAmount      Float
+  committedAmount      Decimal
   responsibleContactId String
   responsibleContact   Contact         @relation("ResponsibleContact", fields: [responsibleContactId], references: [id])
   status               BudgetStatus    @default(DRAFT)
@@ -284,7 +306,7 @@ model SalesOrder {
   customerId String
   customer   Contact          @relation(fields: [customerId], references: [id])
   orderDate  DateTime
-  status     EntryStatus      @default(DRAFT)
+  status     OrderStatus      @default(DRAFT)
   createdBy  String
   creator    User             @relation("CreatedByUser", fields: [createdBy], references: [id])
   createdAt  DateTime         @default(now())
@@ -302,8 +324,8 @@ model SalesOrderLine {
   analyticAccountId String?
   analyticAccount   AnalyticAccount? @relation(fields: [analyticAccountId], references: [id])
   quantity          Float
-  unitPrice         Float
-  total             Float
+  unitPrice         Decimal
+  total             Decimal
 }
 
 model CustomerInvoice {
@@ -336,8 +358,8 @@ model CustomerInvoiceLine {
   analyticAccountId String?
   analyticAccount   AnalyticAccount? @relation(fields: [analyticAccountId], references: [id])
   quantity          Float
-  unitPrice         Float
-  total             Float
+  unitPrice         Decimal
+  total             Decimal
 }
 
 // ------------------------------------------------------
@@ -349,7 +371,7 @@ model PurchaseOrder {
   vendorId   String
   vendor     Contact             @relation(fields: [vendorId], references: [id])
   orderDate  DateTime
-  status     EntryStatus         @default(DRAFT)
+  status     OrderStatus         @default(DRAFT)
   createdBy  String
   creator    User                @relation("CreatedByUser", fields: [createdBy], references: [id])
   createdAt  DateTime            @default(now())
@@ -367,8 +389,8 @@ model PurchaseOrderLine {
   analyticAccountId String?
   analyticAccount   AnalyticAccount? @relation(fields: [analyticAccountId], references: [id])
   quantity          Float
-  unitPrice         Float
-  total             Float
+  unitPrice         Decimal
+  total             Decimal
 }
 
 model VendorBill {
@@ -381,7 +403,7 @@ model VendorBill {
   billReference   String?
   billDate        DateTime
   dueDate         DateTime
-  status          InvoiceStatus     @default(DRAFT)
+  status          BillStatus        @default(DRAFT)
   createdBy       String
   creator         User              @relation("CreatedByUser", fields: [createdBy], references: [id])
   createdAt       DateTime          @default(now())
@@ -401,8 +423,8 @@ model VendorBillLine {
   analyticAccountId String?
   analyticAccount   AnalyticAccount? @relation(fields: [analyticAccountId], references: [id])
   quantity          Float
-  unitPrice         Float
-  total             Float
+  unitPrice         Decimal
+  total             Decimal
 }
 
 // ------------------------------------------------------
@@ -415,7 +437,7 @@ model Payment {
   partnerType   ContactType
   partnerId     String
   partner       Contact             @relation(fields: [partnerId], references: [id])
-  amount        Float
+  amount        Decimal
   paymentDate   DateTime
   paymentMethod PaymentMethod       @default(BANK)
   status        PaymentStatus       @default(DRAFT)
@@ -430,16 +452,16 @@ model Payment {
 }
 
 model PaymentAllocation {
-  id                String           @id @default(uuid())
+  id                String              @id @default(uuid())
   paymentId         String
-  payment           Payment          @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-  documentType      SourceType       // CUSTOMER_INVOICE or VENDOR_BILL
+  payment           Payment             @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  documentType      PaymentDocumentType // CUSTOMER_INVOICE or VENDOR_BILL
   customerInvoiceId String?
-  customerInvoice   CustomerInvoice? @relation(fields: [customerInvoiceId], references: [id])
+  customerInvoice   CustomerInvoice?    @relation(fields: [customerInvoiceId], references: [id])
   vendorBillId      String?
-  vendorBill        VendorBill?      @relation(fields: [vendorBillId], references: [id])
-  allocatedAmount   Float
-  createdAt         DateTime         @default(now())
+  vendorBill        VendorBill?         @relation(fields: [vendorBillId], references: [id])
+  allocatedAmount   Decimal
+  createdAt         DateTime            @default(now())
 }
 
 model PaymentGatewayTransaction {
@@ -449,7 +471,7 @@ model PaymentGatewayTransaction {
   provider              String        // RAZORPAY
   providerOrderId       String
   providerTransactionId String?
-  amount                Float
+  amount                Decimal
   currency              String        @default("INR")
   status                GatewayStatus @default(PENDING)
   failureReason         String?
@@ -502,7 +524,7 @@ model JournalEntry {
   status         EntryStatus   @default(DRAFT)
   sourceType     SourceType    @default(MANUAL)
   sourceId       String?
-  total          Float
+  total          Decimal
   createdAt      DateTime      @default(now())
   postedAt       DateTime?
   cancelledAt    DateTime?
@@ -519,8 +541,8 @@ model JournalItem {
   partner           Contact?         @relation(fields: [partnerId], references: [id])
   analyticAccountId String?
   analyticAccount   AnalyticAccount? @relation(fields: [analyticAccountId], references: [id])
-  debit             Float            @default(0.0)
-  credit            Float            @default(0.0)
+  debit             Decimal          @default(0.0)
+  credit            Decimal          @default(0.0)
   description       String?
 }
 
