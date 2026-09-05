@@ -15,9 +15,13 @@ import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import ProgressBar from '@/components/accounting/ProgressBar';
 import PieChartModal from '@/components/ui/PieChartModal';
+import ReportDocument, { ReportBlock } from '@/components/reports/ReportDocument';
+import BarChart, { SERIES } from '@/components/reports/charts/BarChart';
 import { SelectField, TextField } from '@/components/ui/Field';
 import { formatCurrency, formatDate, formatNumber } from '@/utils/format';
 import { ANALYTIC_TYPES, BUDGET_STATUSES } from '@/utils/constants';
+
+const CHART_LIMIT = 12;
 
 export default function BudgetReportPage() {
   const [filters, setFilters] = useState({
@@ -53,6 +57,15 @@ export default function BudgetReportPage() {
       filters.status,
     ],
   );
+
+  const budgetRows = report.data?.budgets ?? [];
+  // The chart stays readable; the table below always carries every row.
+  const chartRows = [...budgetRows]
+    .sort((a, b) => Number(b.committedAmount) - Number(a.committedAmount))
+    .slice(0, CHART_LIMIT);
+  const periodLabel = `${filters.startDate ? formatDate(filters.startDate) : 'Inception'} to ${
+    filters.endDate ? formatDate(filters.endDate) : 'today'
+  }`;
 
   const update = (key) => (event) => setFilters({ ...filters, [key]: event.target.value });
   const hasFilters = Object.values(filters).some(Boolean);
@@ -138,21 +151,32 @@ export default function BudgetReportPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Budget Report"
-        subtitle="Committed against achieved, computed by the backend for each budget."
-        actions={
-          <div className="flex items-center gap-3">
-            <ViewToggle viewMode={viewMode} onChange={setViewMode} />
-            <Button variant="secondary" onClick={() => window.print()}>
-              Print
-            </Button>
-          </div>
-        }
-      />
+      <div className="print:hidden">
+        <PageHeader
+          title="Budget Report"
+          subtitle="Committed against achieved, computed by the backend for each budget."
+          actions={
+            <div className="flex items-center gap-3 print:hidden">
+              <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+              <Button variant="secondary" onClick={() => window.print()}>
+                Print / Save as PDF
+              </Button>
+            </div>
+          }
+        />
+      </div>
 
-      <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+      <ReportDocument
+        title="Budget Report"
+        subtitle={periodLabel}
+        meta={[
+          { label: 'Period', value: periodLabel },
+          { label: 'Budgets', value: String(budgetRows.length) },
+        ]}
+        basis="Achieved amounts are computed by the accounting system from confirmed invoice and vendor bill lines carrying each budget's analytic account."
+      >
+        <Card>
+        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4 print:hidden">
           <TextField
             label="From"
             name="startDate"
@@ -230,6 +254,26 @@ export default function BudgetReportPage() {
           )}
         </div>
 
+        {budgetRows.length > 0 && (
+          <ReportBlock className="border-b border-slate-200">
+            <BarChart
+              title={
+                budgetRows.length > CHART_LIMIT
+                  ? `Committed against achieved (top ${CHART_LIMIT} by committed amount)`
+                  : 'Committed against achieved'
+              }
+              rows={chartRows.map((row) => ({
+                label: row.name,
+                values: [Number(row.committedAmount), Number(row.achievedAmount)],
+              }))}
+              series={[
+                { name: 'Committed', color: SERIES.blue },
+                { name: 'Achieved', color: SERIES.orange },
+              ]}
+            />
+          </ReportBlock>
+        )}
+
         {viewMode === 'list' ? (
           <Table
             columns={columns}
@@ -250,6 +294,8 @@ export default function BudgetReportPage() {
             }
           />
         ) : (
+          <>
+          <div className="print:hidden">
           <KanbanBoard
             rows={report.data?.budgets ?? []}
             loading={report.loading}
@@ -318,8 +364,18 @@ export default function BudgetReportPage() {
               </div>
             )}
           />
+          </div>
+          <div className="hidden print:block">
+            <Table
+              columns={columns}
+              rows={budgetRows}
+              emptyTitle="No budgets in this report"
+            />
+          </div>
+          </>
         )}
-      </Card>
+        </Card>
+      </ReportDocument>
 
       <PieChartModal 
         isOpen={!!pieChartData} 
