@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const accountingService = require('./accounting.service');
 
 async function generateBillNumber() {
   const latest = await prisma.vendorBill.findFirst({
@@ -136,14 +137,39 @@ const updateBill = async (id, data) => {
 
 const confirmBill = async (id) => {
   return await prisma.$transaction(async (tx) => {
-    const bill = await tx.vendorBill.findUnique({ where: { id } });
+    const bill = await tx.vendorBill.findUnique({ 
+      where: { id },
+      include: { lines: true }
+    });
     if (!bill) throw new Error('NOT_FOUND: Bill not found');
     if (bill.status !== 'DRAFT') throw new Error('CONFLICT: Only DRAFT bills can be confirmed');
 
-    return await tx.vendorBill.update({
+    const updatedBill = await tx.vendorBill.update({
       where: { id },
       data: { status: 'CONFIRMED' }
     });
+
+    const payableAccount = await tx.chartOfAccount.findUnique({ where: { code: '210000' } });
+    if (!payableAccount) throw new Error('BAD_REQUEST: Payable account 210000 not found');
+
+    const totalAmount = bill.lines.reduce((sum, line) => sum + Number(line.total), 0);
+    const jeLines = [];
+    jeLines.push({ accountId: payableAccount.id, debit: 0, credit: totalAmount, partnerId: bill.vendorId });
+    for (const line of bill.lines) {
+      jeLines.push({ accountId: line.accountId, debit: Number(line.total), credit: 0, analyticAccountId: line.analyticAccountId });
+    }
+
+    await accountingService.createSourceEntry(tx, {
+      journalType: 'PURCHASE',
+      partnerId: bill.vendorId,
+      accountingDate: bill.billDate,
+      documentDate: bill.billDate,
+      sourceType: 'VENDOR_BILL',
+      sourceId: bill.id,
+      lines: jeLines
+    });
+
+    return updatedBill;
   });
 };
 

@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const accountingService = require('./accounting.service');
 
 async function generatePaymentNumber() {
   const latest = await prisma.payment.findFirst({
@@ -23,22 +24,50 @@ const createPayment = async (userId, data) => {
   if (paymentType === 'RECEIVE' && partnerType !== 'CUSTOMER') throw new Error('BAD_REQUEST: RECEIVE must be for a CUSTOMER');
   if (paymentType === 'SEND' && partnerType !== 'VENDOR') throw new Error('BAD_REQUEST: SEND must be for a VENDOR');
 
-  const payNumber = await generatePaymentNumber();
+  return await prisma.$transaction(async (tx) => {
+    const payNumber = await generatePaymentNumber();
 
-  return await prisma.payment.create({
-    data: {
-      number: payNumber,
-      paymentType,
-      partnerType,
-      partnerId,
-      amount: Number(amount),
-      paymentDate: new Date(paymentDate),
-      paymentMethod,
-      reference,
-      note,
-      status: 'CONFIRMED', 
-      createdBy: userId
+    const payment = await tx.payment.create({
+      data: {
+        number: payNumber,
+        paymentType,
+        partnerType,
+        partnerId,
+        amount: Number(amount),
+        paymentDate: new Date(paymentDate),
+        paymentMethod,
+        reference,
+        note,
+        status: 'CONFIRMED', 
+        createdBy: userId
+      }
+    });
+
+    const paymentAccount = await tx.chartOfAccount.findUnique({ where: { code: '100000' } });
+    if (!paymentAccount) throw new Error('BAD_REQUEST: Bank account 100000 not found');
+
+    const jeLines = [];
+    if (paymentType === 'RECEIVE') {
+      const receivableAccount = await tx.chartOfAccount.findUnique({ where: { code: '120000' } });
+      jeLines.push({ accountId: paymentAccount.id, debit: Number(amount), credit: 0 });
+      jeLines.push({ accountId: receivableAccount.id, debit: 0, credit: Number(amount), partnerId });
+    } else {
+      const payableAccount = await tx.chartOfAccount.findUnique({ where: { code: '210000' } });
+      jeLines.push({ accountId: payableAccount.id, debit: Number(amount), credit: 0, partnerId });
+      jeLines.push({ accountId: paymentAccount.id, debit: 0, credit: Number(amount) });
     }
+
+    await accountingService.createSourceEntry(tx, {
+      journalType: 'BANK',
+      partnerId,
+      accountingDate: payment.paymentDate,
+      documentDate: payment.paymentDate,
+      sourceType: paymentType === 'RECEIVE' ? 'CUSTOMER_PAYMENT' : 'VENDOR_PAYMENT',
+      sourceId: payment.id,
+      lines: jeLines
+    });
+
+    return payment;
   });
 };
 

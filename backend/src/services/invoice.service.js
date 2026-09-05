@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const accountingService = require('./accounting.service');
 
 async function generateInvoiceNumber() {
   const latest = await prisma.customerInvoice.findFirst({
@@ -139,14 +140,39 @@ const updateInvoice = async (id, data) => {
 
 const confirmInvoice = async (id) => {
   return await prisma.$transaction(async (tx) => {
-    const inv = await tx.customerInvoice.findUnique({ where: { id } });
+    const inv = await tx.customerInvoice.findUnique({ 
+      where: { id },
+      include: { lines: true }
+    });
     if (!inv) throw new Error('NOT_FOUND: Invoice not found');
     if (inv.status !== 'DRAFT') throw new Error('CONFLICT: Only DRAFT invoices can be confirmed');
 
-    return await tx.customerInvoice.update({
+    const updatedInv = await tx.customerInvoice.update({
       where: { id },
       data: { status: 'CONFIRMED' }
     });
+
+    const receivableAccount = await tx.chartOfAccount.findUnique({ where: { code: '120000' } });
+    if (!receivableAccount) throw new Error('BAD_REQUEST: Receivable account 120000 not found');
+
+    const totalAmount = inv.lines.reduce((sum, line) => sum + Number(line.total), 0);
+    const jeLines = [];
+    jeLines.push({ accountId: receivableAccount.id, debit: totalAmount, credit: 0, partnerId: inv.customerId });
+    for (const line of inv.lines) {
+      jeLines.push({ accountId: line.accountId, debit: 0, credit: Number(line.total), analyticAccountId: line.analyticAccountId });
+    }
+
+    await accountingService.createSourceEntry(tx, {
+      journalType: 'SALES',
+      partnerId: inv.customerId,
+      accountingDate: inv.invoiceDate,
+      documentDate: inv.invoiceDate,
+      sourceType: 'CUSTOMER_INVOICE',
+      sourceId: inv.id,
+      lines: jeLines
+    });
+
+    return updatedInv;
   });
 };
 

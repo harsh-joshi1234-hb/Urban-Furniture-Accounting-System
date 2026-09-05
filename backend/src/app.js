@@ -24,6 +24,7 @@ const accountRoutes = require('./routes/account.routes');
 const journalRoutes = require('./routes/journal.routes');
 const journalEntryRoutes = require('./routes/journalEntry.routes');
 const reportRoutes = require('./routes/report.routes');
+const budgetRoutes = require('./routes/budget.routes');
 const portalRoutes = require('./routes/portal.routes');
 
 const app = express();
@@ -62,6 +63,7 @@ app.use('/api/accounts', accountRoutes);
 app.use('/api/journals', journalRoutes);
 app.use('/api/journal-entries', journalEntryRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/budgets', budgetRoutes);
 app.use('/api/portal', portalRoutes);
 
 // Global Handlers

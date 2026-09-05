@@ -65,6 +65,25 @@ const ALL_PERMISSIONS = [
   // Reports
   { code: 'report.read', name: 'Read Reports', module: 'Reports' },
   
+  // Accounting
+  { code: 'account.read', name: 'Read Accounts', module: 'Accounting' },
+  { code: 'account.create', name: 'Create Accounts', module: 'Accounting' },
+  { code: 'account.update', name: 'Update Accounts', module: 'Accounting' },
+  { code: 'journal.read', name: 'Read Journals', module: 'Accounting' },
+  { code: 'journal.create', name: 'Create Journals', module: 'Accounting' },
+  { code: 'journal_entry.read', name: 'Read Journal Entries', module: 'Accounting' },
+  { code: 'journal_entry.create', name: 'Create Journal Entries', module: 'Accounting' },
+  { code: 'journal_entry.post', name: 'Post Journal Entries', module: 'Accounting' },
+  { code: 'journal_entry.cancel', name: 'Cancel Journal Entries', module: 'Accounting' },
+  
+  // Budgets
+  { code: 'budget.read', name: 'Read Budgets', module: 'Accounting' },
+  { code: 'budget.create', name: 'Create Budgets', module: 'Accounting' },
+  { code: 'budget.update', name: 'Update Budgets', module: 'Accounting' },
+  { code: 'budget.confirm', name: 'Confirm Budgets', module: 'Accounting' },
+  { code: 'budget.revise', name: 'Revise Budgets', module: 'Accounting' },
+  { code: 'budget.cancel', name: 'Cancel Budgets', module: 'Accounting' },
+
   // Contacts
   { code: 'contact.create', name: 'Create Contact', module: 'Master Data' },
   { code: 'contact.read', name: 'Read Contact', module: 'Master Data' },
@@ -199,6 +218,83 @@ async function main() {
     },
   });
   console.log(`Ensured ChartOfAccount ${expenseAccount.code} exists.`);
+
+  const bankAccount = await prisma.chartOfAccount.upsert({
+    where: { code: '100000' },
+    update: {},
+    create: {
+      code: '100000',
+      name: 'Main Bank Account',
+      type: 'BANK',
+    },
+  });
+
+  const receivableAccount = await prisma.chartOfAccount.upsert({
+    where: { code: '120000' },
+    update: {},
+    create: {
+      code: '120000',
+      name: 'Accounts Receivable',
+      type: 'ASSET',
+    },
+  });
+
+  const payableAccount = await prisma.chartOfAccount.upsert({
+    where: { code: '210000' },
+    update: {},
+    create: {
+      code: '210000',
+      name: 'Accounts Payable',
+      type: 'LIABILITY',
+    },
+  });
+
+  // Journals
+  await prisma.journal.upsert({
+    where: { id: 'default-sales' }, // Using ID might be tricky for upsert without ID, let's use a unique mechanism or just create if not exists
+    update: {},
+    create: {
+      name: 'Sales Journal',
+      type: 'SALES',
+      defaultAccountId: salesAccount.id,
+    }
+  }).catch(async (e) => {
+    // Basic fallback if name isn't unique or ID missing, we'll just search by name
+    const existing = await prisma.journal.findFirst({ where: { name: 'Sales Journal' } });
+    if (!existing) {
+       await prisma.journal.create({ data: { name: 'Sales Journal', type: 'SALES', defaultAccountId: salesAccount.id } });
+    }
+  });
+
+  await prisma.journal.upsert({
+    where: { id: 'default-purchase' },
+    update: {},
+    create: {
+      name: 'Purchase Journal',
+      type: 'PURCHASE',
+      defaultAccountId: expenseAccount.id,
+    }
+  }).catch(async () => {
+    const existing = await prisma.journal.findFirst({ where: { name: 'Purchase Journal' } });
+    if (!existing) {
+       await prisma.journal.create({ data: { name: 'Purchase Journal', type: 'PURCHASE', defaultAccountId: expenseAccount.id } });
+    }
+  });
+
+  await prisma.journal.upsert({
+    where: { id: 'default-bank' },
+    update: {},
+    create: {
+      name: 'Bank Journal',
+      type: 'BANK',
+      defaultAccountId: bankAccount.id,
+    }
+  }).catch(async () => {
+    const existing = await prisma.journal.findFirst({ where: { name: 'Bank Journal' } });
+    if (!existing) {
+       await prisma.journal.create({ data: { name: 'Bank Journal', type: 'BANK', defaultAccountId: bankAccount.id } });
+    }
+  });
 
   console.log('Seed completed successfully.');
 }
