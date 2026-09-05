@@ -52,7 +52,7 @@ export default function PieChartModal({ isOpen, onClose, data }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 p-4 backdrop-blur-sm transition-opacity"
       onClick={handleBackdropClick}
     >
       <div
@@ -60,12 +60,12 @@ export default function PieChartModal({ isOpen, onClose, data }) {
         className="w-full max-w-md scale-100 transform overflow-hidden rounded-xl bg-white p-6 text-left shadow-2xl transition-all"
       >
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-lg font-semibold leading-6 text-slate-900">
+          <h3 className="text-lg font-semibold leading-6 text-stone-900">
             Budget Distribution
           </h3>
           <button
             type="button"
-            className="rounded-md bg-white text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="rounded-md bg-white text-stone-400 hover:text-stone-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
             onClick={onClose}
           >
             <span className="sr-only">Close</span>
@@ -76,7 +76,7 @@ export default function PieChartModal({ isOpen, onClose, data }) {
         </div>
 
         <div className="mt-2 text-center">
-          <p className="text-sm font-medium text-slate-500 mb-6">{data.name}</p>
+          <p className="text-sm font-medium text-stone-500 mb-6">{data.name}</p>
 
           <div className="relative mx-auto h-48 w-48">
             <svg viewBox="0 0 42 42" className="h-full w-full -rotate-90 transform drop-shadow-md">
@@ -86,7 +86,7 @@ export default function PieChartModal({ isOpen, onClose, data }) {
                 cy="21"
                 r={radius}
                 fill="transparent"
-                stroke="#e2e8f0" // slate-200
+                stroke="#e2e8f0" // stone-200
                 strokeWidth="8"
               />
 
@@ -122,10 +122,10 @@ export default function PieChartModal({ isOpen, onClose, data }) {
             </svg>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold text-slate-700">
+              <span className="text-2xl font-bold text-stone-700">
                 {formatNumber(achievedPct, 1)}%
               </span>
-              <span className="text-xs text-slate-500 uppercase tracking-wider">Achieved</span>
+              <span className="text-xs text-stone-500 uppercase tracking-wider">Achieved</span>
             </div>
           </div>
 
@@ -135,8 +135,8 @@ export default function PieChartModal({ isOpen, onClose, data }) {
                 <div className="w-3 h-3 rounded-full bg-cyan-500 shadow-sm" />
                 <span className="text-xs font-semibold text-cyan-800 uppercase">Achieved</span>
               </div>
-              <span className="text-sm font-bold text-slate-900">{formatCurrency(achieved)}</span>
-              <span className="text-xs text-slate-500">{formatNumber(achievedPct, 1)}%</span>
+              <span className="text-sm font-bold text-stone-900">{formatCurrency(achieved)}</span>
+              <span className="text-xs text-stone-500">{formatNumber(achievedPct, 1)}%</span>
             </div>
 
             <div className="flex flex-col items-center p-3 bg-rose-50 rounded-lg border border-rose-100">
@@ -144,8 +144,8 @@ export default function PieChartModal({ isOpen, onClose, data }) {
                 <div className="w-3 h-3 rounded-full bg-rose-500 shadow-sm" />
                 <span className="text-xs font-semibold text-rose-800 uppercase">Balance</span>
               </div>
-              <span className="text-sm font-bold text-slate-900">{formatCurrency(balance)}</span>
-              <span className="text-xs text-slate-500">{formatNumber(balancePct, 1)}%</span>
+              <span className="text-sm font-bold text-stone-900">{formatCurrency(balance)}</span>
+              <span className="text-xs text-stone-500">{formatNumber(balancePct, 1)}%</span>
             </div>
           </div>
         </div>

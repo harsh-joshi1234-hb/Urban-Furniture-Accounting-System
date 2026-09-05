@@ -5,12 +5,12 @@ export default function EmptyState({
   icon = '📄',
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 px-6 py-14 text-center">
-      <span className="text-3xl" aria-hidden="true">
+    <div className="flex flex-col items-center justify-center gap-2 px-6 py-16 text-center">
+      <span className="mb-1 flex h-11 w-11 items-center justify-center rounded-full bg-stone-100 text-xl" aria-hidden="true">
         {icon}
       </span>
-      <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
-      {description && <p className="max-w-sm text-sm text-slate-500">{description}</p>}
+      <h3 className="text-sm font-semibold text-stone-900">{title}</h3>
+      {description && <p className="max-w-sm text-sm text-stone-500">{description}</p>}
       {action && <div className="pt-3">{action}</div>}
     </div>
   );

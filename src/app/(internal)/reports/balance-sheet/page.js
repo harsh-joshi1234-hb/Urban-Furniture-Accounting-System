@@ -12,7 +12,7 @@ import ErrorState from '@/components/ui/ErrorState';
 import EmptyState from '@/components/ui/EmptyState';
 import ReportSection from '@/components/accounting/ReportSection';
 import ReportDocument, { ReportBlock } from '@/components/reports/ReportDocument';
-import { StackedComparison, SERIES } from '@/components/reports/charts/BarChart';
+import { StackedComparison, SERIES } from '@/components/charts/BarChart';
 import { TextField } from '@/components/ui/Field';
 import { formatCurrency, formatDate } from '@/utils/format';
 
@@ -59,7 +59,7 @@ export default function BalanceSheetPage() {
         basis="Prepared from posted journal entries only. Retained earnings are computed by the accounting system."
       >
         <Card>
-          <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4 print:hidden">
+          <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4 print:hidden">
             <TextField
               label="As of date"
               name="asOfDate"
@@ -89,35 +89,35 @@ export default function BalanceSheetPage() {
           ) : (
             <>
               <ReportBlock>
-                <div className="grid grid-cols-1 gap-4 border-b border-slate-200 p-4 sm:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 border-b border-stone-200 p-4 sm:grid-cols-3">
                   <StatCard label="Total Assets" value={formatCurrency(data.totalAssets)} />
                   <StatCard label="Total Liabilities" value={formatCurrency(data.totalLiabilities)} />
                   <StatCard label="Total Capital" value={formatCurrency(data.totalCapital)} />
                 </div>
               </ReportBlock>
 
-              <ReportBlock className="border-b border-slate-200">
+              <ReportBlock className="border-b border-stone-200">
                 <StackedComparison
                   title="Assets against liabilities and capital"
                   bars={[
                     {
                       label: 'Assets',
                       segments: [
-                        { name: 'Assets', value: data.totalAssets, color: SERIES.blue },
+                        { name: 'Assets', value: data.totalAssets, color: SERIES.teal },
                       ],
                     },
                     {
                       label: 'Liabilities + Capital',
                       segments: [
-                        { name: 'Liabilities', value: data.totalLiabilities, color: SERIES.orange },
-                        { name: 'Capital', value: data.totalCapital, color: SERIES.aqua },
+                        { name: 'Liabilities', value: data.totalLiabilities, color: SERIES.terracotta },
+                        { name: 'Capital', value: data.totalCapital, color: SERIES.blue },
                       ],
                     },
                   ]}
                 />
               </ReportBlock>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:divide-x lg:divide-slate-200">
+              <div className="grid grid-cols-1 lg:grid-cols-2 lg:divide-x lg:divide-stone-200">
                 <ReportBlock>
                   <ReportSection
                     title="Assets"
@@ -143,11 +143,11 @@ export default function BalanceSheetPage() {
                       totalLabel="Total Capital"
                     />
                   </ReportBlock>
-                  <div className="flex items-center justify-between bg-slate-50 px-4 py-2.5">
-                    <span className="text-sm font-medium text-slate-700">
+                  <div className="flex items-center justify-between bg-stone-50 px-4 py-2.5">
+                    <span className="text-sm font-medium text-stone-700">
                       Liabilities + Capital
                     </span>
-                    <span className="text-sm font-semibold text-slate-900">
+                    <span className="text-sm font-semibold text-stone-900">
                       {formatCurrency(
                         Number(data.totalLiabilities) + Number(data.totalCapital),
                       )}
@@ -156,8 +156,8 @@ export default function BalanceSheetPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t border-slate-200 px-4 py-3">
-                <span className="text-sm font-semibold text-slate-800">
+              <div className="flex items-center justify-between border-t border-stone-200 px-4 py-3">
+                <span className="text-sm font-semibold text-stone-800">
                   Assets = Liabilities + Capital
                 </span>
                 {/* isBalanced is asserted by the backend, not recomputed here. */}

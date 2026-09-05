@@ -11,7 +11,7 @@ import ErrorState from '@/components/ui/ErrorState';
 import EmptyState from '@/components/ui/EmptyState';
 import ReportSection from '@/components/accounting/ReportSection';
 import ReportDocument, { ReportBlock } from '@/components/reports/ReportDocument';
-import BarChart, { SERIES } from '@/components/reports/charts/BarChart';
+import BarChart, { SERIES } from '@/components/charts/BarChart';
 import { TextField } from '@/components/ui/Field';
 import { formatCurrency, formatDate } from '@/utils/format';
 
@@ -60,7 +60,7 @@ export default function ProfitAndLossPage() {
         basis="Prepared from posted journal entries only. Draft and cancelled entries are excluded."
       >
         <Card>
-          <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4 print:hidden">
+          <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4 print:hidden">
             <TextField
               label="From"
               name="startDate"
@@ -100,7 +100,7 @@ export default function ProfitAndLossPage() {
           ) : (
             <>
               <ReportBlock>
-                <div className="grid grid-cols-1 gap-4 border-b border-slate-200 p-4 sm:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 border-b border-stone-200 p-4 sm:grid-cols-3">
                   <StatCard label="Total Income" value={formatCurrency(data.totalIncome)} tone="green" />
                   <StatCard label="Total Expenses" value={formatCurrency(data.totalExpenses)} tone="red" />
                   <StatCard
@@ -112,27 +112,27 @@ export default function ProfitAndLossPage() {
               </ReportBlock>
 
               {data.income?.length > 0 && (
-                <ReportBlock className="border-b border-slate-200">
+                <ReportBlock className="border-b border-stone-200">
                   <BarChart
                     title="Income by account"
                     rows={data.income.map((row) => ({
                       label: `${row.code} ${row.name}`,
                       value: row.amount,
                     }))}
-                    series={[{ name: 'Income', color: SERIES.blue }]}
+                    series={[{ name: 'Income', color: SERIES.teal }]}
                   />
                 </ReportBlock>
               )}
 
               {data.expenses?.length > 0 && (
-                <ReportBlock className="border-b border-slate-200">
+                <ReportBlock className="border-b border-stone-200">
                   <BarChart
                     title="Expenses by account"
                     rows={data.expenses.map((row) => ({
                       label: `${row.code} ${row.name}`,
                       value: row.amount,
                     }))}
-                    series={[{ name: 'Expense', color: SERIES.orange }]}
+                    series={[{ name: 'Expense', color: SERIES.terracotta }]}
                   />
                 </ReportBlock>
               )}
@@ -156,8 +156,8 @@ export default function ProfitAndLossPage() {
                 />
               </ReportBlock>
 
-              <div className="flex items-center justify-between bg-slate-50 px-4 py-3">
-                <span className="text-sm font-semibold text-slate-800">Net Income</span>
+              <div className="flex items-center justify-between bg-stone-50 px-4 py-3">
+                <span className="text-sm font-semibold text-stone-800">Net Income</span>
                 <span
                   className={`text-base font-semibold ${
                     Number(data.netIncome) >= 0 ? 'text-emerald-700' : 'text-red-700'
@@ -172,7 +172,7 @@ export default function ProfitAndLossPage() {
       </ReportDocument>
 
       {data?.period && (data.period.startDate || data.period.endDate) && (
-        <p className="mt-3 text-xs text-slate-500 print:hidden">
+        <p className="mt-3 text-xs text-stone-500 print:hidden">
           Period: {data.period.startDate ? formatDate(data.period.startDate) : 'inception'} to{' '}
           {data.period.endDate ? formatDate(data.period.endDate) : 'today'}
         </p>

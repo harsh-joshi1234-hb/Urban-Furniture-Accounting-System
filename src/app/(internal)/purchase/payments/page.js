@@ -59,7 +59,7 @@ export default function VendorPaymentsPage() {
       render: (row) => (
         <Link
           href={`/purchase/bills/${row.id}`}
-          className="font-medium text-indigo-600 hover:text-indigo-700"
+          className="font-medium text-brand-600 hover:text-brand-700"
         >
           {row.number}
         </Link>
@@ -98,7 +98,7 @@ export default function VendorPaymentsPage() {
       render: (row) => (
         <Link
           href={`/purchase/bills/${row.billId}`}
-          className="font-medium text-indigo-600 hover:text-indigo-700"
+          className="font-medium text-brand-600 hover:text-brand-700"
         >
           {row.billNumber}
         </Link>

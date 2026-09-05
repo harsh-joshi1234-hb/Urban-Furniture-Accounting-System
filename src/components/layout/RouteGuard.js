@@ -32,7 +32,7 @@ export default function RouteGuard({ allow, children }) {
           error={new ApiError('You do not have access to this page.', 403)}
           onRetry={() => router.replace(homeRouteForRole(user.role))}
         />
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-stone-400">
           Signed in as {user.loginId} ({user.role})
         </p>
       </div>

@@ -16,7 +16,7 @@ import Badge from '@/components/ui/Badge';
 import ProgressBar from '@/components/accounting/ProgressBar';
 import PieChartModal from '@/components/ui/PieChartModal';
 import ReportDocument, { ReportBlock } from '@/components/reports/ReportDocument';
-import BarChart, { SERIES } from '@/components/reports/charts/BarChart';
+import BarChart, { SERIES } from '@/components/charts/BarChart';
 import { SelectField, TextField } from '@/components/ui/Field';
 import { formatCurrency, formatDate, formatNumber } from '@/utils/format';
 import { ANALYTIC_TYPES, BUDGET_STATUSES } from '@/utils/constants';
@@ -77,7 +77,7 @@ export default function BudgetReportPage() {
       render: (row) => (
         <Link
           href={`/account/budgets/${row.id}`}
-          className="font-medium text-indigo-600 hover:text-indigo-700"
+          className="font-medium text-brand-600 hover:text-brand-700"
         >
           {row.name}
         </Link>
@@ -120,7 +120,7 @@ export default function BudgetReportPage() {
       render: (row) => (
         <div className="min-w-[120px]">
           <ProgressBar value={row.achievedPct} />
-          <span className="text-xs text-slate-500">{formatNumber(row.achievedPct, 1)}%</span>
+          <span className="text-xs text-stone-500">{formatNumber(row.achievedPct, 1)}%</span>
         </div>
       ),
     },
@@ -137,7 +137,7 @@ export default function BudgetReportPage() {
             e.stopPropagation();
             setPieChartData(row);
           }}
-          className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+          className="rounded p-1.5 text-stone-400 hover:bg-stone-100 hover:text-brand-600 transition-colors"
           title="View Budget Chart"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -176,7 +176,7 @@ export default function BudgetReportPage() {
         basis="Achieved amounts are computed by the accounting system from confirmed invoice and vendor bill lines carrying each budget's analytic account."
       >
         <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4 print:hidden">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4 print:hidden">
           <TextField
             label="From"
             name="startDate"
@@ -255,7 +255,7 @@ export default function BudgetReportPage() {
         </div>
 
         {budgetRows.length > 0 && (
-          <ReportBlock className="border-b border-slate-200">
+          <ReportBlock className="border-b border-stone-200">
             <BarChart
               title={
                 budgetRows.length > CHART_LIMIT
@@ -267,8 +267,8 @@ export default function BudgetReportPage() {
                 values: [Number(row.committedAmount), Number(row.achievedAmount)],
               }))}
               series={[
-                { name: 'Committed', color: SERIES.blue },
-                { name: 'Achieved', color: SERIES.orange },
+                { name: 'Committed', color: SERIES.teal },
+                { name: 'Achieved', color: SERIES.terracotta },
               ]}
             />
           </ReportBlock>
@@ -315,7 +315,7 @@ export default function BudgetReportPage() {
             renderCard={(row) => (
               <div className="flex flex-col h-full">
                 <div className="flex items-start justify-between mb-3">
-                  <Link href={`/account/budgets/${row.id}`} className="font-semibold text-slate-900 hover:text-indigo-600 truncate">
+                  <Link href={`/account/budgets/${row.id}`} className="font-semibold text-stone-900 hover:text-brand-600 truncate">
                     {row.name}
                   </Link>
                   <button
@@ -325,7 +325,7 @@ export default function BudgetReportPage() {
                       e.stopPropagation();
                       setPieChartData(row);
                     }}
-                    className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+                    className="shrink-0 rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-brand-600 transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
@@ -339,23 +339,23 @@ export default function BudgetReportPage() {
                   <Badge status={row.status} />
                 </div>
 
-                <div className="text-sm text-slate-500 mb-4">
+                <div className="text-sm text-stone-500 mb-4">
                   <span className="block">{formatDate(row.startDate)} - {formatDate(row.endDate)}</span>
-                  {row.analyticAccount && <span className="block mt-1">Analytic: <span className="font-medium text-slate-700">{row.analyticAccount}</span></span>}
+                  {row.analyticAccount && <span className="block mt-1">Analytic: <span className="font-medium text-stone-700">{row.analyticAccount}</span></span>}
                 </div>
 
-                <div className="mt-auto space-y-2 text-sm border-t border-slate-100 pt-3">
+                <div className="mt-auto space-y-2 text-sm border-t border-stone-100 pt-3">
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Committed:</span>
-                    <span className="font-medium text-slate-900">{formatCurrency(row.committedAmount)}</span>
+                    <span className="text-stone-500">Committed:</span>
+                    <span className="font-medium text-stone-900">{formatCurrency(row.committedAmount)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Achieved:</span>
-                    <span className="font-medium text-slate-900">{formatCurrency(row.achievedAmount)}</span>
+                    <span className="text-stone-500">Achieved:</span>
+                    <span className="font-medium text-stone-900">{formatCurrency(row.achievedAmount)}</span>
                   </div>
                   <div className="mt-2">
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-slate-500">Progress</span>
+                      <span className="text-stone-500">Progress</span>
                       <span className="font-medium">{formatNumber(row.achievedPct, 1)}%</span>
                     </div>
                     <ProgressBar value={row.achievedPct} />
@@ -369,6 +369,8 @@ export default function BudgetReportPage() {
             <Table
               columns={columns}
               rows={budgetRows}
+              pageSize={0}
+              maxBodyHeight="none"
               emptyTitle="No budgets in this report"
             />
           </div>

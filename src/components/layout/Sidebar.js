@@ -39,9 +39,19 @@ export default function Sidebar({ role, open, onClose }) {
 
   const content = (
     <nav className="flex h-full flex-col gap-4 overflow-y-auto px-3 py-4">
-      <Link href={role === 'USER' ? '/portal' : '/dashboard'} className="px-2">
-        <span className="block text-sm font-semibold text-white">Urban Furniture</span>
-        <span className="block text-xs text-slate-400">Accounting System</span>
+      <Link
+        href={role === 'USER' ? '/portal' : '/dashboard'}
+        className="mb-1 flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition hover:bg-white/5"
+      >
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-xs font-bold text-white shadow-sm">
+          UF
+        </span>
+        <span className="min-w-0">
+          <span className="block truncate text-sm font-semibold tracking-tight text-white">
+            Urban Furniture
+          </span>
+          <span className="block truncate text-[11px] text-stone-400">Accounting System</span>
+        </span>
       </Link>
 
       {groups.map((group) => {
@@ -53,12 +63,12 @@ export default function Sidebar({ role, open, onClose }) {
             <button
               type="button"
               onClick={() => toggleGroup(group.label)}
-              className="group flex w-full cursor-pointer items-center justify-between rounded px-2 py-1 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:text-slate-200 focus:outline-none"
+              className="group flex w-full cursor-pointer items-center justify-between rounded px-2 py-1 text-left text-[10px] font-semibold uppercase tracking-[0.12em] text-stone-500 transition-colors hover:text-stone-300 focus:outline-none"
               aria-expanded={isOpen}
             >
               <span>{group.label}</span>
               <svg
-                className={`h-3.5 w-3.5 transform text-slate-400 transition-transform duration-200 group-hover:text-slate-200 ${
+                className={`h-3.5 w-3.5 transform text-stone-400 transition-transform duration-200 group-hover:text-stone-200 ${
                   isOpen ? 'rotate-0' : '-rotate-90'
                 }`}
                 fill="none"
@@ -77,10 +87,10 @@ export default function Sidebar({ role, open, onClose }) {
                     <Link
                       href={item.href}
                       onClick={onClose}
-                      className={`block rounded-md px-3 py-2 text-sm transition ${
+                      className={`relative block rounded-lg py-2 pl-3.5 pr-3 text-sm transition ${
                         isActive(pathname, item.href)
-                          ? 'bg-indigo-600 text-white font-medium'
-                          : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                          ? 'bg-brand-600 font-medium text-white shadow-sm before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-white/80'
+                          : 'text-stone-400 hover:bg-white/5 hover:text-white'
                       }`}
                     >
                       {item.label}
@@ -98,13 +108,15 @@ export default function Sidebar({ role, open, onClose }) {
   return (
     <>
       {/* Desktop / tablet */}
-      <aside className="hidden w-60 shrink-0 bg-slate-900 lg:block print:hidden">{content}</aside>
+      <aside className="hidden w-60 shrink-0 border-r border-stone-800 bg-[#1c1917] lg:block print:hidden">
+        {content}
+      </aside>
 
       {/* Mobile drawer */}
       {open && (
         <div className="fixed inset-0 z-30 lg:hidden">
-          <div className="absolute inset-0 bg-slate-900/50" onClick={onClose} aria-hidden="true" />
-          <aside className="relative h-full w-64 bg-slate-900">{content}</aside>
+          <div className="absolute inset-0 bg-stone-900/50" onClick={onClose} aria-hidden="true" />
+          <aside className="relative h-full w-64 border-r border-stone-800 bg-[#1c1917]">{content}</aside>
         </div>
       )}
     </>

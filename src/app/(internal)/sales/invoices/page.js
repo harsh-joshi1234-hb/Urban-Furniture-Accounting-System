@@ -34,7 +34,7 @@ function InvoiceList() {
     {
       key: 'number',
       header: 'Invoice No.',
-      render: (row) => <span className="font-medium text-slate-900">{row.number}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.number}</span>,
     },
     { key: 'customer', header: 'Customer', render: (row) => row.customer?.name || '-' },
     { key: 'reference', header: 'Reference', render: (row) => row.invoiceReference || '-' },
@@ -71,7 +71,7 @@ function InvoiceList() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <SelectField
             label="Status"
             name="status"

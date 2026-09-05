@@ -172,7 +172,7 @@ export default function JournalEntryDetailPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label="Total Debit" value={formatCurrency(totalDebit)} />
         <StatCard label="Total Credit" value={formatCurrency(totalCredit)} />
-        <StatCard label="Entry Total" value={formatCurrency(doc.total)} tone="indigo" />
+        <StatCard label="Entry Total" value={formatCurrency(doc.total)} tone="brand" />
       </div>
 
       <Card
@@ -228,7 +228,7 @@ export default function JournalEntryDetailPage() {
               analyticAccounts={analytics.data ?? []}
               errors={fieldErrors}
             />
-            <p className="text-xs text-slate-500">Only draft entries can be edited.</p>
+            <p className="text-xs text-stone-500">Only draft entries can be edited.</p>
             <div className="flex gap-2">
               <Button type="submit" loading={save.submitting}>
                 Save
@@ -245,43 +245,43 @@ export default function JournalEntryDetailPage() {
         ) : (
           <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3 lg:grid-cols-5">
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Number</dt>
-              <dd className="mt-0.5 font-medium text-slate-900">{doc.number}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Number</dt>
+              <dd className="mt-0.5 font-medium text-stone-900">{doc.number}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Journal</dt>
-              <dd className="mt-0.5 text-slate-800">
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Journal</dt>
+              <dd className="mt-0.5 text-stone-800">
                 {doc.journal ? `${doc.journal.name} (${doc.journal.type})` : '-'}
               </dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Accounting Date</dt>
-              <dd className="mt-0.5 text-slate-800">{formatDate(doc.accountingDate)}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Accounting Date</dt>
+              <dd className="mt-0.5 text-stone-800">{formatDate(doc.accountingDate)}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Document Date</dt>
-              <dd className="mt-0.5 text-slate-800">{formatDate(doc.documentDate)}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Document Date</dt>
+              <dd className="mt-0.5 text-stone-800">{formatDate(doc.documentDate)}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Source</dt>
-              <dd className="mt-0.5 text-slate-800">{titleCase(doc.sourceType)}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Source</dt>
+              <dd className="mt-0.5 text-stone-800">{titleCase(doc.sourceType)}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Partner</dt>
-              <dd className="mt-0.5 text-slate-800">
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Partner</dt>
+              <dd className="mt-0.5 text-stone-800">
                 {doc.partnerId ? contactName(doc.partnerId) : '-'}
               </dd>
             </div>
             {doc.postedAt && (
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Posted</dt>
-                <dd className="mt-0.5 text-slate-800">{formatDate(doc.postedAt)}</dd>
+                <dt className="text-xs uppercase tracking-wide text-stone-500">Posted</dt>
+                <dd className="mt-0.5 text-stone-800">{formatDate(doc.postedAt)}</dd>
               </div>
             )}
             {doc.cancelledAt && (
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Cancelled</dt>
-                <dd className="mt-0.5 text-slate-800">{formatDate(doc.cancelledAt)}</dd>
+                <dt className="text-xs uppercase tracking-wide text-stone-500">Cancelled</dt>
+                <dd className="mt-0.5 text-stone-800">{formatDate(doc.cancelledAt)}</dd>
               </div>
             )}
           </dl>
@@ -292,51 +292,51 @@ export default function JournalEntryDetailPage() {
         <Card title="Entry lines" className="mt-4">
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
-              <thead className="bg-slate-50">
+              <thead className="bg-stone-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+                  <th className="px-4 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                     Account
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+                  <th className="px-4 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                     Partner
                   </th>
-                  <th className="px-4 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+                  <th className="px-4 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                     Description
                   </th>
-                  <th className="px-4 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+                  <th className="px-4 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                     Debit
                   </th>
-                  <th className="px-4 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+                  <th className="px-4 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                     Credit
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-stone-100">
                 {(doc.items ?? []).map((item) => (
                   <tr key={item.id}>
-                    <td className="px-4 py-2 text-slate-800">{accountLabel(item.accountId)}</td>
-                    <td className="px-4 py-2 text-slate-600">
+                    <td className="px-4 py-2 text-stone-800">{accountLabel(item.accountId)}</td>
+                    <td className="px-4 py-2 text-stone-600">
                       {item.partnerId ? contactName(item.partnerId) : '-'}
                     </td>
-                    <td className="px-4 py-2 text-slate-600">{item.description || '-'}</td>
-                    <td className="px-4 py-2 text-right text-slate-700">
+                    <td className="px-4 py-2 text-stone-600">{item.description || '-'}</td>
+                    <td className="px-4 py-2 text-right text-stone-700">
                       {Number(item.debit) ? formatCurrency(item.debit) : '-'}
                     </td>
-                    <td className="px-4 py-2 text-right text-slate-700">
+                    <td className="px-4 py-2 text-right text-stone-700">
                       {Number(item.credit) ? formatCurrency(item.credit) : '-'}
                     </td>
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="bg-slate-50">
+              <tfoot className="bg-stone-50">
                 <tr>
-                  <td colSpan={3} className="px-4 py-3 text-right text-sm font-medium text-slate-700">
+                  <td colSpan={3} className="px-4 py-3 text-right text-sm font-medium text-stone-700">
                     Totals
                   </td>
-                  <td className="px-4 py-3 text-right text-sm font-semibold text-slate-900">
+                  <td className="px-4 py-3 text-right text-sm font-semibold text-stone-900">
                     {formatCurrency(totalDebit)}
                   </td>
-                  <td className="px-4 py-3 text-right text-sm font-semibold text-slate-900">
+                  <td className="px-4 py-3 text-right text-sm font-semibold text-stone-900">
                     {formatCurrency(totalCredit)}
                   </td>
                 </tr>

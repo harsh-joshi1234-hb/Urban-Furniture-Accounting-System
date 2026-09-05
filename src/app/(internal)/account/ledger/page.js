@@ -65,7 +65,7 @@ function LedgerScreen() {
         row.entry ? (
           <Link
             href={`/account/journal-entries/${row.entry.id}`}
-            className="font-medium text-indigo-600 hover:text-indigo-700"
+            className="font-medium text-brand-600 hover:text-brand-700"
           >
             {row.entry.number}
           </Link>
@@ -98,7 +98,7 @@ function LedgerScreen() {
       header: 'Balance',
       align: 'right',
       render: (row) => (
-        <span className="font-medium text-slate-900">{formatCurrency(row.balance)}</span>
+        <span className="font-medium text-stone-900">{formatCurrency(row.balance)}</span>
       ),
     },
   ];
@@ -111,7 +111,7 @@ function LedgerScreen() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <SelectField
             label="Account"
             name="accountId"
@@ -161,11 +161,11 @@ function LedgerScreen() {
         ) : (
           <>
             {balance.error ? (
-              <div className="border-b border-slate-200 p-4">
+              <div className="border-b border-stone-200 p-4">
                 <ErrorState error={balance.error} onRetry={balance.reload} />
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4 border-b border-slate-200 p-4 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 border-b border-stone-200 p-4 sm:grid-cols-3">
                 <StatCard
                   label="Total Debit"
                   value={balance.loading ? '...' : formatCurrency(balance.data?.debitTotal)}
@@ -177,7 +177,7 @@ function LedgerScreen() {
                 <StatCard
                   label="Closing Balance"
                   value={balance.loading ? '...' : formatCurrency(balance.data?.balance)}
-                  tone="indigo"
+                  tone="brand"
                   hint="Computed by the backend"
                 />
               </div>

@@ -50,8 +50,8 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h2 className="text-base font-semibold text-slate-900">Sign in</h2>
-      <p className="mt-1 text-sm text-slate-500">Use your Login Id to continue.</p>
+      <h2 className="text-base font-semibold text-stone-900">Sign in</h2>
+      <p className="mt-1 text-sm text-stone-500">Use your Login Id to continue.</p>
 
       <form onSubmit={onSubmit} className="mt-5 space-y-4" noValidate>
         <FormError error={error} />
@@ -84,12 +84,12 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500">
-        <Link href="/forgot-password" className="hover:text-indigo-600">
+      <div className="mt-4 flex items-center justify-center gap-2 text-sm text-stone-500">
+        <Link href="/forgot-password" className="hover:text-brand-600">
           Forgot Password
         </Link>
         <span aria-hidden="true">|</span>
-        <Link href="/signup" className="font-medium text-indigo-600 hover:text-indigo-700">
+        <Link href="/signup" className="font-medium text-brand-600 hover:text-brand-700">
           Sign Up
         </Link>
       </div>

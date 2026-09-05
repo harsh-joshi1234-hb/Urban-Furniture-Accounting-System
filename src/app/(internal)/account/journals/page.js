@@ -64,9 +64,9 @@ export default function JournalsPage() {
     {
       key: 'name',
       header: 'Journal Name',
-      render: (row) => <span className="font-medium text-slate-900">{row.name}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.name}</span>,
     },
-    { key: 'type', header: 'Type', render: (row) => <Badge tone="indigo">{row.type}</Badge> },
+    { key: 'type', header: 'Type', render: (row) => <Badge tone="brand">{row.type}</Badge> },
     {
       key: 'defaultAccount',
       header: 'Default Account',
@@ -74,7 +74,7 @@ export default function JournalsPage() {
         row.defaultAccount ? (
           <Link
             href={`/account/chart-of-accounts/${row.defaultAccount.id}`}
-            className="text-indigo-600 hover:text-indigo-700"
+            className="text-brand-600 hover:text-brand-700"
           >
             {row.defaultAccount.code} - {row.defaultAccount.name}
           </Link>
@@ -94,7 +94,7 @@ export default function JournalsPage() {
       render: (row) => (
         <Link
           href={`/account/journal-entries?journalId=${row.id}`}
-          className="text-xs font-medium text-indigo-600 hover:text-indigo-700"
+          className="text-xs font-medium text-brand-600 hover:text-brand-700"
         >
           View entries
         </Link>

@@ -60,7 +60,7 @@ export default function ReceiptsPage() {
       render: (row) => (
         <Link
           href={`/sales/invoices/${row.id}`}
-          className="font-medium text-indigo-600 hover:text-indigo-700"
+          className="font-medium text-brand-600 hover:text-brand-700"
         >
           {row.number}
         </Link>
@@ -99,7 +99,7 @@ export default function ReceiptsPage() {
       render: (row) => (
         <Link
           href={`/sales/invoices/${row.invoiceId}`}
-          className="font-medium text-indigo-600 hover:text-indigo-700"
+          className="font-medium text-brand-600 hover:text-brand-700"
         >
           {row.invoiceNumber}
         </Link>

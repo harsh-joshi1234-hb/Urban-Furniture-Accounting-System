@@ -18,12 +18,12 @@ function KanbanIcon() {
 
 export default function ViewToggle({ viewMode, onChange }) {
   return (
-    <div className="flex bg-slate-100 p-0.5 rounded-md border border-slate-200 shadow-sm">
+    <div className="flex bg-stone-100 p-0.5 rounded-md border border-stone-200 shadow-sm">
       <button
         type="button"
         onClick={() => onChange('list')}
         className={`p-1.5 rounded-sm transition-all ${
-          viewMode === 'list' ? 'bg-white shadow-sm text-indigo-600 ring-1 ring-slate-200 ring-opacity-50' : 'text-slate-500 hover:text-slate-700'
+          viewMode === 'list' ? 'bg-white shadow-sm text-brand-600 ring-1 ring-stone-200 ring-opacity-50' : 'text-stone-500 hover:text-stone-700'
         }`}
         title="List View"
       >
@@ -33,7 +33,7 @@ export default function ViewToggle({ viewMode, onChange }) {
         type="button"
         onClick={() => onChange('kanban')}
         className={`p-1.5 rounded-sm transition-all ${
-          viewMode === 'kanban' ? 'bg-white shadow-sm text-indigo-600 ring-1 ring-slate-200 ring-opacity-50' : 'text-slate-500 hover:text-slate-700'
+          viewMode === 'kanban' ? 'bg-white shadow-sm text-brand-600 ring-1 ring-stone-200 ring-opacity-50' : 'text-stone-500 hover:text-stone-700'
         }`}
         title="Kanban View"
       >

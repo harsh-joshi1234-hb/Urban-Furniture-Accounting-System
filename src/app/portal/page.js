@@ -62,7 +62,7 @@ export default function PortalDashboardPage() {
         title="Invoices to pay"
         className="mt-5"
         actions={
-          <Link href="/portal/invoices" className="text-xs font-medium text-indigo-600">
+          <Link href="/portal/invoices" className="text-xs font-medium text-brand-600">
             View all
           </Link>
         }
@@ -74,16 +74,16 @@ export default function PortalDashboardPage() {
             description="You have no outstanding invoices."
           />
         ) : (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-stone-100">
             {outstanding.slice(0, 5).map((invoice) => (
               <li key={invoice.id}>
                 <Link
                   href={`/portal/invoices/${invoice.id}`}
-                  className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-slate-50"
+                  className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-stone-50"
                 >
                   <div>
-                    <p className="text-sm font-medium text-slate-800">{invoice.number}</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-sm font-medium text-stone-800">{invoice.number}</p>
+                    <p className="text-xs text-stone-500">
                       Due {formatDate(invoice.dueDate)}
                     </p>
                   </div>
@@ -104,7 +104,7 @@ export default function PortalDashboardPage() {
         title="Recent payments"
         className="mt-5"
         actions={
-          <Link href="/portal/payments" className="text-xs font-medium text-indigo-600">
+          <Link href="/portal/payments" className="text-xs font-medium text-brand-600">
             View all
           </Link>
         }
@@ -112,15 +112,15 @@ export default function PortalDashboardPage() {
         {recentPayments.length === 0 ? (
           <EmptyState title="No payments yet" description="Your payments will appear here." />
         ) : (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-stone-100">
             {recentPayments.map((payment) => (
               <li
                 key={payment.id}
                 className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
               >
                 <div>
-                  <p className="text-sm font-medium text-slate-800">{payment.invoiceNumber}</p>
-                  <p className="text-xs text-slate-500">{formatDate(payment.createdAt)}</p>
+                  <p className="text-sm font-medium text-stone-800">{payment.invoiceNumber}</p>
+                  <p className="text-xs text-stone-500">{formatDate(payment.createdAt)}</p>
                 </div>
                 <p className="text-sm font-medium text-emerald-600">
                   {formatCurrency(payment.amount)}

@@ -25,7 +25,7 @@ export default function PortalInvoicesPage() {
     {
       key: 'number',
       header: 'Invoice',
-      render: (row) => <span className="font-medium text-slate-900">{row.number}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.number}</span>,
     },
     { key: 'invoiceDate', header: 'Invoice Date', render: (row) => formatDate(row.invoiceDate) },
     { key: 'dueDate', header: 'Due Date', render: (row) => formatDate(row.dueDate) },
@@ -41,7 +41,7 @@ export default function PortalInvoicesPage() {
       header: 'Amount Due',
       align: 'right',
       render: (row) => (
-        <span className={row.amountDue > 0 ? 'font-medium text-amber-700' : 'text-slate-500'}>
+        <span className={row.amountDue > 0 ? 'font-medium text-amber-700' : 'text-stone-500'}>
           {formatCurrency(row.amountDue)}
         </span>
       ),
@@ -54,7 +54,7 @@ export default function PortalInvoicesPage() {
       <PageHeader title="My invoices" subtitle="Invoices issued to your account." />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <SelectField
             label="Show"
             name="filter"

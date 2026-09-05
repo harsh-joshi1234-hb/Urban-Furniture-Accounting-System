@@ -83,7 +83,7 @@ export default function ProductCategoriesPage() {
     {
       key: 'name',
       header: 'Category',
-      render: (row) => <span className="font-medium text-slate-900">{row.name}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.name}</span>,
     },
     {
       key: 'isActive',

@@ -10,6 +10,7 @@ import Card from '@/components/ui/Card';
 import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
+import Avatar from '@/components/ui/Avatar';
 import { TextField, SelectField } from '@/components/ui/Field';
 import ViewToggle from '@/components/ui/ViewToggle';
 import KanbanBoard from '@/components/ui/KanbanBoard';
@@ -45,19 +46,8 @@ export default function ProductsPage() {
       header: 'Product',
       render: (row) => (
         <div className="flex items-center gap-3">
-          {row.imageUrl ? (
-            <div
-              className="h-8 w-8 shrink-0 rounded bg-cover bg-center ring-1 ring-slate-200"
-              style={{ backgroundImage: `url(${row.imageUrl})` }}
-            />
-          ) : (
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 ring-1 ring-slate-200 text-slate-400">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-              </svg>
-            </div>
-          )}
-          <span className="font-medium text-slate-900">{row.name}</span>
+          <Avatar src={row.imageUrl} name={row.name} size="sm" />
+          <span className="font-medium text-stone-900">{row.name}</span>
         </div>
       ),
     },
@@ -96,7 +86,7 @@ export default function ProductsPage() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <TextField
             label="Search"
             name="search"
@@ -160,27 +150,19 @@ export default function ProductsPage() {
             }
             renderCard={(row) => (
               <div className="flex items-start gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded bg-slate-100 text-slate-400 overflow-hidden">
-                  {row.imageUrl ? (
-                    <div className="h-full w-full bg-cover bg-center" style={{ backgroundImage: `url(${row.imageUrl})` }} />
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-8 w-8">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                    </svg>
-                  )}
-                </div>
+                <Avatar src={row.imageUrl} name={row.name} size="lg" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-1">
-                    <h3 className="truncate font-semibold text-slate-900">{row.name}</h3>
+                    <h3 className="truncate font-semibold text-stone-900">{row.name}</h3>
                   </div>
                   <div className="mt-2 space-y-1">
                     <div className="flex justify-between text-sm">
-                      <span className="text-slate-500">Sales Price:</span>
-                      <span className="font-medium text-slate-900">{formatCurrency(row.salesPrice)}</span>
+                      <span className="text-stone-500">Sales Price:</span>
+                      <span className="font-medium text-stone-900">{formatCurrency(row.salesPrice)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-slate-500">Cost:</span>
-                      <span className="font-medium text-slate-900">{formatCurrency(row.cost)}</span>
+                      <span className="text-stone-500">Cost:</span>
+                      <span className="font-medium text-stone-900">{formatCurrency(row.cost)}</span>
                     </div>
                   </div>
                 </div>

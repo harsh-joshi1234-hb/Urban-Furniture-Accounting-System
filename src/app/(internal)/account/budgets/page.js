@@ -41,7 +41,7 @@ function BudgetList() {
     {
       key: 'name',
       header: 'Budget Name',
-      render: (row) => <span className="font-medium text-slate-900">{row.name}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.name}</span>,
     },
     {
       key: 'analyticAccount',
@@ -84,7 +84,7 @@ function BudgetList() {
       render: (row) => (
         <div className="min-w-[120px]">
           <ProgressBar value={row.achievedPct} />
-          <span className="text-xs text-slate-500">{formatNumber(row.achievedPct, 1)}%</span>
+          <span className="text-xs text-stone-500">{formatNumber(row.achievedPct, 1)}%</span>
         </div>
       ),
     },
@@ -104,7 +104,7 @@ function BudgetList() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <SelectField
             label="Status"
             name="status"

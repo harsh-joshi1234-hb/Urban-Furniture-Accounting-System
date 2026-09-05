@@ -29,7 +29,7 @@ function PurchaseOrderList() {
     {
       key: 'number',
       header: 'PO No.',
-      render: (row) => <span className="font-medium text-slate-900">{row.number}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.number}</span>,
     },
     { key: 'vendor', header: 'Vendor', render: (row) => row.vendor?.name || '-' },
     { key: 'orderDate', header: 'PO Date', render: (row) => formatDate(row.orderDate) },
@@ -55,7 +55,7 @@ function PurchaseOrderList() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <SelectField
             label="Status"
             name="status"

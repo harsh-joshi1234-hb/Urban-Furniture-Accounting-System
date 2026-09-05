@@ -128,7 +128,7 @@ export default function ChartOfAccountsPage() {
     {
       key: 'code',
       header: 'Code',
-      render: (row) => <span className="font-medium text-slate-900">{row.code}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.code}</span>,
     },
     { key: 'name', header: 'Account Name' },
     {
@@ -186,7 +186,7 @@ export default function ChartOfAccountsPage() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <TextField
             label="Search"
             name="search"

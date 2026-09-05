@@ -1,11 +1,11 @@
 'use client';
 
 const baseInput =
-  'block w-full rounded-md border-0 px-3 py-2 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:bg-slate-50 disabled:text-slate-500';
+  'block w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-stone-900 shadow-xs ring-1 ring-inset ring-stone-300 transition placeholder:text-stone-400 hover:ring-stone-400 focus:ring-2 focus:ring-inset focus:ring-brand-600 disabled:bg-stone-50 disabled:text-stone-500 disabled:ring-stone-200';
 
 export function Label({ htmlFor, children, required }) {
   return (
-    <label htmlFor={htmlFor} className="block text-sm font-medium text-slate-700">
+    <label htmlFor={htmlFor} className="block text-[13px] font-medium text-stone-700">
       {children}
       {required && <span className="ml-0.5 text-red-500">*</span>}
     </label>
@@ -32,7 +32,7 @@ export function FieldWrapper({
       {error ? (
         <p className="mt-1 text-xs text-red-600">{error}</p>
       ) : hint ? (
-        <p className="mt-1 text-xs text-slate-500">{hint}</p>
+        <p className="mt-1 text-xs text-stone-500">{hint}</p>
       ) : null}
     </div>
   );
@@ -135,10 +135,10 @@ export function CheckboxField({ label, name, className = '', ...props }) {
         id={name}
         name={name}
         type="checkbox"
-        className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600"
+        className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-600"
         {...props}
       />
-      <label htmlFor={name} className="text-sm text-slate-700">
+      <label htmlFor={name} className="text-sm text-stone-700">
         {label}
       </label>
     </div>

@@ -25,9 +25,9 @@ export default function ErrorState({ error, onRetry, className = '' }) {
       <span className="text-3xl" aria-hidden="true">
         ⚠️
       </span>
-      <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
-      <p className="max-w-md text-sm text-slate-500">{message}</p>
-      {status ? <p className="text-xs text-slate-400">HTTP {status}</p> : null}
+      <h3 className="text-sm font-semibold text-stone-800">{title}</h3>
+      <p className="max-w-md text-sm text-stone-500">{message}</p>
+      {status ? <p className="text-xs text-stone-400">HTTP {status}</p> : null}
       {onRetry && status !== 403 && (
         <div className="pt-3">
           <Button variant="secondary" size="sm" onClick={onRetry}>

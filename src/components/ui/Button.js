@@ -2,20 +2,21 @@
 
 const VARIANTS = {
   primary:
-    'bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600 disabled:bg-indigo-300',
+    'bg-brand-600 text-white shadow-xs hover:bg-brand-700 active:bg-brand-800 disabled:bg-brand-300 disabled:shadow-none',
   secondary:
-    'bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:text-slate-400',
+    'bg-white text-stone-700 ring-1 ring-inset ring-stone-300 shadow-xs hover:bg-stone-50 hover:text-stone-900 active:bg-stone-100 disabled:text-stone-400 disabled:ring-stone-200',
   danger:
-    'bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600 disabled:bg-red-300',
+    'bg-red-600 text-white shadow-xs hover:bg-red-700 active:bg-red-800 disabled:bg-red-300 disabled:shadow-none',
   success:
-    'bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:outline-emerald-600 disabled:bg-emerald-300',
-  ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 disabled:text-slate-300',
+    'bg-emerald-600 text-white shadow-xs hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-emerald-300 disabled:shadow-none',
+  ghost:
+    'bg-transparent text-stone-600 hover:bg-stone-100 hover:text-stone-900 disabled:text-stone-300',
 };
 
 const SIZES = {
-  sm: 'px-2.5 py-1.5 text-xs',
-  md: 'px-3.5 py-2 text-sm',
-  lg: 'px-4 py-2.5 text-sm',
+  sm: 'h-8 px-2.5 text-xs gap-1.5',
+  md: 'h-9 px-3.5 text-sm gap-2',
+  lg: 'h-10 px-4 text-sm gap-2',
 };
 
 export default function Button({
@@ -24,6 +25,7 @@ export default function Button({
   size = 'md',
   loading = false,
   disabled = false,
+  icon = null,
   className = '',
   type = 'button',
   ...props
@@ -32,14 +34,16 @@ export default function Button({
     <button
       type={type}
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 rounded-md font-medium shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-lg font-medium tracking-tight transition-colors duration-150 focus-ring disabled:cursor-not-allowed ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
       {...props}
     >
-      {loading && (
+      {loading ? (
         <span
           className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
           aria-hidden="true"
         />
+      ) : (
+        icon
       )}
       {children}
     </button>

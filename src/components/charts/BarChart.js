@@ -12,10 +12,19 @@ import { formatCompactCurrency, formatCurrency } from '@/utils/format';
  * data table, so identity is never carried by colour alone.
  */
 
+/*
+ * Categorical slots. The warm pair (terracotta / teal) matches the walnut theme
+ * and clears every gate on a white surface: CVD deltaE 13.7 (target >=8),
+ * normal-vision 27.1 (floor 15), all >=3:1 contrast. Adding blue as a third
+ * slot also passes, so the balance sheet can show three sections.
+ */
 export const SERIES = {
-  blue: '#2a78d6',
-  orange: '#eb6834',
-  aqua: '#1baf7a',
+  terracotta: '#c2410c',
+  teal: '#0d9488',
+  blue: '#1d4ed8',
+  // legacy aliases kept so older call sites keep working
+  orange: '#c2410c',
+  aqua: '#0d9488',
 };
 
 const INK = {
@@ -60,6 +69,8 @@ export default function BarChart({
   rows = [],
   series = [{ name: 'Amount', color: SERIES.blue }],
   title,
+  valueFormatter = formatCompactCurrency,
+  tooltipFormatter = formatCurrency,
   emptyMessage = 'No amounts to plot.',
   className = '',
 }) {
@@ -76,7 +87,7 @@ export default function BarChart({
 
   if (normalised.length === 0 || max === 0) {
     return (
-      <div className={`px-4 py-6 text-sm text-slate-500 ${className}`}>{emptyMessage}</div>
+      <div className={`px-4 py-6 text-sm text-stone-500 ${className}`}>{emptyMessage}</div>
     );
   }
 
@@ -91,7 +102,7 @@ export default function BarChart({
   return (
     <figure className={`m-0 ${className}`}>
       {title && (
-        <figcaption className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-slate-600">
+        <figcaption className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-stone-600">
           {title}
         </figcaption>
       )}
@@ -99,7 +110,7 @@ export default function BarChart({
       {multi && (
         <div className="flex flex-wrap gap-4 px-4 pt-2">
           {series.map((entry) => (
-            <span key={entry.name} className="inline-flex items-center gap-1.5 text-xs text-slate-600">
+            <span key={entry.name} className="inline-flex items-center gap-1.5 text-xs text-stone-600">
               <span
                 aria-hidden="true"
                 className="inline-block h-2.5 w-2.5 rounded-sm"
@@ -159,7 +170,7 @@ export default function BarChart({
                       style={{ printColorAdjust: 'exact' }}
                     >
                       <title>
-                        {`${row.label} - ${series[seriesIndex]?.name || 'Amount'}: ${formatCurrency(value)}`}
+                        {`${row.label} - ${series[seriesIndex]?.name || 'Amount'}: ${tooltipFormatter(value)}`}
                       </title>
                     </path>
                     <text
@@ -169,7 +180,7 @@ export default function BarChart({
                       fill={INK.primary}
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     >
-                      {formatCompactCurrency(value)}
+                      {valueFormatter(value)}
                     </text>
                   </g>
                 );
@@ -196,7 +207,7 @@ export function StackedComparison({ bars = [], title, className = '' }) {
 
   if (bars.length === 0 || max === 0) {
     return (
-      <div className={`px-4 py-6 text-sm text-slate-500 ${className}`}>
+      <div className={`px-4 py-6 text-sm text-stone-500 ${className}`}>
         No balances to plot.
       </div>
     );
@@ -215,14 +226,14 @@ export function StackedComparison({ bars = [], title, className = '' }) {
   return (
     <figure className={`m-0 ${className}`}>
       {title && (
-        <figcaption className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-slate-600">
+        <figcaption className="px-4 pt-4 text-xs font-semibold uppercase tracking-wide text-stone-600">
           {title}
         </figcaption>
       )}
 
       <div className="flex flex-wrap gap-4 px-4 pt-2">
         {legend.map((segment) => (
-          <span key={segment.name} className="inline-flex items-center gap-1.5 text-xs text-slate-600">
+          <span key={segment.name} className="inline-flex items-center gap-1.5 text-xs text-stone-600">
             <span
               aria-hidden="true"
               className="inline-block h-2.5 w-2.5 rounded-sm"

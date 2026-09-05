@@ -11,7 +11,7 @@ function Shell({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-1 bg-slate-50">
+    <div className="flex min-h-screen flex-1 bg-stone-50">
       <Sidebar role={user?.role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header onToggleSidebar={() => setSidebarOpen((open) => !open)} />

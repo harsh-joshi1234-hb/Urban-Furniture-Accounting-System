@@ -177,8 +177,8 @@ export default function RazorpayCheckoutButton({ invoice, customer, onPaymentCom
         className={[
           'w-full py-3 px-6 rounded-xl font-semibold text-white transition-all duration-200',
           isLoading
-            ? 'bg-indigo-500/40 cursor-not-allowed'
-            : 'bg-indigo-600 hover:bg-indigo-500 active:scale-95 shadow-lg hover:shadow-indigo-500/30',
+            ? 'bg-brand-500/40 cursor-not-allowed'
+            : 'bg-brand-600 hover:bg-brand-500 active:scale-95 shadow-lg hover:shadow-brand-500/30',
         ].join(' ')}
       >
         {isLoading ? (

@@ -175,7 +175,7 @@ export default function VendorBillDetailPage() {
                 onChange={(e) => setDraft({ ...draft, dueDate: e.target.value })}
               />
             </div>
-            <p className="text-xs text-slate-500">Only draft bill headers can be edited.</p>
+            <p className="text-xs text-stone-500">Only draft bill headers can be edited.</p>
             <div className="flex gap-2">
               <Button type="submit" loading={saveHeader.submitting}>
                 Save
@@ -192,24 +192,24 @@ export default function VendorBillDetailPage() {
         ) : (
           <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3 lg:grid-cols-5">
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Bill No.</dt>
-              <dd className="mt-0.5 font-medium text-slate-900">{doc.number}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Bill No.</dt>
+              <dd className="mt-0.5 font-medium text-stone-900">{doc.number}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Vendor</dt>
-              <dd className="mt-0.5 text-slate-800">{doc.vendor?.name || '-'}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Vendor</dt>
+              <dd className="mt-0.5 text-stone-800">{doc.vendor?.name || '-'}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Reference</dt>
-              <dd className="mt-0.5 text-slate-800">{doc.billReference || '-'}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Reference</dt>
+              <dd className="mt-0.5 text-stone-800">{doc.billReference || '-'}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Bill Date</dt>
-              <dd className="mt-0.5 text-slate-800">{formatDate(doc.billDate)}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Bill Date</dt>
+              <dd className="mt-0.5 text-stone-800">{formatDate(doc.billDate)}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Due Date</dt>
-              <dd className="mt-0.5 text-slate-800">{formatDate(doc.dueDate)}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Due Date</dt>
+              <dd className="mt-0.5 text-stone-800">{formatDate(doc.dueDate)}</dd>
             </div>
           </dl>
         )}
@@ -226,17 +226,17 @@ export default function VendorBillDetailPage() {
 
       <Card title="Payments" className="mt-4">
         {doc.allocations?.length > 0 ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-stone-100">
             {doc.allocations.map((allocation) => (
               <li
                 key={allocation.id}
                 className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
               >
                 <div>
-                  <p className="text-sm font-medium text-slate-800">
+                  <p className="text-sm font-medium text-stone-800">
                     {allocation.payment?.number || 'Payment'}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-stone-500">
                     {allocation.payment?.paymentMethod
                       ? `Paid via ${allocation.payment.paymentMethod}`
                       : formatDate(allocation.createdAt)}
@@ -249,7 +249,7 @@ export default function VendorBillDetailPage() {
             ))}
           </ul>
         ) : (
-          <p className="px-4 py-6 text-center text-sm text-slate-500">
+          <p className="px-4 py-6 text-center text-sm text-stone-500">
             No payments recorded against this bill yet.
           </p>
         )}

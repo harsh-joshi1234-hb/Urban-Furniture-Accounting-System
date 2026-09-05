@@ -155,14 +155,14 @@ function UsersScreen() {
     {
       key: 'name',
       header: 'Name',
-      render: (row) => <span className="font-medium text-slate-900">{row.name}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.name}</span>,
     },
     { key: 'loginId', header: 'Login Id' },
     { key: 'email', header: 'Email' },
     {
       key: 'role',
       header: 'Role',
-      render: (row) => <Badge tone="indigo">{row.role?.name}</Badge>,
+      render: (row) => <Badge tone="brand">{row.role?.name}</Badge>,
     },
     {
       key: 'isActive',

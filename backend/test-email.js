@@ -77,7 +77,11 @@ function startSmtpSink() {
   });
 }
 
-/** Reloads the email service so it picks up changed env vars. */
+/**
+ * Reloads the email service so it picks up changed env vars.
+ * Note: SMTP_HOST is blanked rather than deleted in the "not configured" tests -
+ * dotenv repopulates absent keys from a real .env, which would defeat them.
+ */
 function loadEmailService() {
   delete require.cache[require.resolve('./src/services/email.service')];
   delete require.cache[require.resolve('./src/config/env')];
@@ -102,13 +106,13 @@ async function check(name, fn) {
   console.log('--- SMTP NOT CONFIGURED ---');
 
   await check('isConfigured() is false without SMTP_HOST', async () => {
-    delete process.env.SMTP_HOST;
+    process.env.SMTP_HOST = '';
     const email = loadEmailService();
     assert.equal(email.isConfigured(), false);
   });
 
   await check('sendPasswordResetEmail degrades gracefully instead of throwing', async () => {
-    delete process.env.SMTP_HOST;
+    process.env.SMTP_HOST = '';
     const email = loadEmailService();
     const result = await email.sendPasswordResetEmail({
       to: 'nobody@example.com',
@@ -121,7 +125,7 @@ async function check(name, fn) {
   });
 
   await check('verifyConnection() reports unconfigured rather than failing', async () => {
-    delete process.env.SMTP_HOST;
+    process.env.SMTP_HOST = '';
     const email = loadEmailService();
     const status = await email.verifyConnection();
     assert.equal(status.configured, false);

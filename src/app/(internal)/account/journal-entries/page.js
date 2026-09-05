@@ -39,7 +39,7 @@ function JournalEntryList() {
     {
       key: 'number',
       header: 'Number',
-      render: (row) => <span className="font-medium text-slate-900">{row.number}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.number}</span>,
     },
     {
       key: 'accountingDate',
@@ -69,7 +69,7 @@ function JournalEntryList() {
       header: 'Total',
       align: 'right',
       render: (row) => (
-        <span className="font-medium text-slate-900">{formatCurrency(row.total)}</span>
+        <span className="font-medium text-stone-900">{formatCurrency(row.total)}</span>
       ),
     },
     { key: 'status', header: 'Status', render: (row) => <Badge status={row.status} /> },
@@ -88,7 +88,7 @@ function JournalEntryList() {
       />
 
       <Card>
-        <div className="flex flex-wrap items-end gap-3 border-b border-slate-200 p-4">
+        <div className="flex flex-wrap items-end gap-3 border-b border-stone-200 p-4">
           <SelectField
             label="Status"
             name="status"

@@ -25,18 +25,18 @@ export default function PortalProfilePage() {
         <dl className="space-y-4">
           {rows.map((row) => (
             <div key={row.label} className="flex flex-wrap justify-between gap-2">
-              <dt className="text-sm text-slate-500">{row.label}</dt>
-              <dd className="text-sm font-medium text-slate-900">{row.value}</dd>
+              <dt className="text-sm text-stone-500">{row.label}</dt>
+              <dd className="text-sm font-medium text-stone-900">{row.value}</dd>
             </div>
           ))}
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <dt className="text-sm text-slate-500">Role</dt>
+            <dt className="text-sm text-stone-500">Role</dt>
             <dd>
-              <Badge tone="indigo">{user?.role}</Badge>
+              <Badge tone="brand">{user?.role}</Badge>
             </dd>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <dt className="text-sm text-slate-500">Status</dt>
+            <dt className="text-sm text-stone-500">Status</dt>
             <dd>
               <Badge status={user?.isActive ? 'ACTIVE' : 'INACTIVE'} />
             </dd>

@@ -53,7 +53,7 @@ export default function PortalPaymentsPage() {
       render: (row) => (
         <Link
           href={`/portal/invoices/${row.invoiceId}`}
-          className="font-medium text-indigo-600 hover:text-indigo-700"
+          className="font-medium text-brand-600 hover:text-brand-700"
         >
           {row.invoiceNumber}
         </Link>
@@ -76,7 +76,7 @@ export default function PortalPaymentsPage() {
         return due > 0 ? (
           <span className="font-semibold text-rose-600">{formatCurrency(due)}</span>
         ) : (
-          <span className="text-slate-500">Paid in full</span>
+          <span className="text-stone-500">Paid in full</span>
         );
       },
     },

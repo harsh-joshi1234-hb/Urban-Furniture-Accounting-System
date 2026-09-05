@@ -39,8 +39,8 @@ export default function ForgotPasswordPage() {
         <span className="text-3xl" aria-hidden="true">
           ✉️
         </span>
-        <h2 className="mt-2 text-base font-semibold text-slate-900">Check your inbox</h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <h2 className="mt-2 text-base font-semibold text-stone-900">Check your inbox</h2>
+        <p className="mt-1 text-sm text-stone-500">
           If that account exists, password reset instructions have been sent.
         </p>
         <div className="mt-5 flex flex-col gap-2">
@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
               I have a reset token
             </Button>
           </Link>
-          <Link href="/login" className="text-sm text-indigo-600 hover:text-indigo-700">
+          <Link href="/login" className="text-sm text-brand-600 hover:text-brand-700">
             Back to sign in
           </Link>
         </div>
@@ -59,8 +59,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <div>
-      <h2 className="text-base font-semibold text-slate-900">Forgot password</h2>
-      <p className="mt-1 text-sm text-slate-500">
+      <h2 className="text-base font-semibold text-stone-900">Forgot password</h2>
+      <p className="mt-1 text-sm text-stone-500">
         Enter your email and we will send reset instructions.
       </p>
 
@@ -81,8 +81,8 @@ export default function ForgotPasswordPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
-        <Link href="/login" className="hover:text-indigo-600">
+      <p className="mt-4 text-center text-sm text-stone-500">
+        <Link href="/login" className="hover:text-brand-600">
           Back to sign in
         </Link>
       </p>

@@ -58,8 +58,8 @@ function ResetPasswordForm() {
 
   return (
     <div>
-      <h2 className="text-base font-semibold text-slate-900">Reset password</h2>
-      <p className="mt-1 text-sm text-slate-500">
+      <h2 className="text-base font-semibold text-stone-900">Reset password</h2>
+      <p className="mt-1 text-sm text-stone-500">
         Paste the reset token you received and choose a new password.
       </p>
 
@@ -97,8 +97,8 @@ function ResetPasswordForm() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
-        <Link href="/login" className="hover:text-indigo-600">
+      <p className="mt-4 text-center text-sm text-stone-500">
+        <Link href="/login" className="hover:text-brand-600">
           Back to sign in
         </Link>
       </p>

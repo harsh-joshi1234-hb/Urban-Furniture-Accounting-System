@@ -1,8 +1,54 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Design tokens
+   One place for the palette, elevation and radii the whole app draws from.
+   ========================================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm linen page, white cards - the furniture-showroom base */
+  --background: #faf7f2;
+  --foreground: #1c1917;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --surface-sunken: #f5f1ea;
+  --border: #e8e1d8;
+  --border-strong: #d6ccbf;
+
+  /* Ink (warm greys) */
+  --ink-primary: #1c1917;
+  --ink-secondary: #57534e;
+  --ink-muted: #78716c;
+
+  /* Brand - walnut. 5.82:1 with white text, so it carries buttons and links. */
+  --brand: #8b5a32;
+  --brand-hover: #714829;
+  --brand-soft: #f3e9de;
+
+  /* Elevation - low and warm, never floaty */
+  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.06);
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.05), 0 1px 3px rgba(28, 25, 23, 0.07);
+  --shadow-md: 0 2px 4px rgba(28, 25, 23, 0.05), 0 4px 12px rgba(28, 25, 23, 0.09);
+  --shadow-lg: 0 8px 24px rgba(28, 25, 23, 0.14);
+}
+
+/*
+ * Brand scale (walnut). Verified against white:
+ *   600 5.82:1 - 700 7.89:1 - 800 9.98:1
+ * so white-on-brand buttons and brand-on-white links both clear AA.
+ */
+@theme {
+  --color-brand-50: #faf6f1;
+  --color-brand-100: #f3e9de;
+  --color-brand-200: #e7d3be;
+  --color-brand-300: #d6b593;
+  --color-brand-400: #c08f63;
+  --color-brand-500: #a9713f;
+  --color-brand-600: #8b5a32;
+  --color-brand-700: #714829;
+  --color-brand-800: #5c3b23;
+  --color-brand-900: #4b3120;
+  --color-brand-950: #2a1b11;
 }
 
 @theme inline {
@@ -12,17 +58,50 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Shared utilities
+   ========================================================================== */
+
+/* Money and any column that must align vertically */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.card-shadow {
+  box-shadow: var(--shadow-sm);
+}
+
+.elevated {
+  box-shadow: var(--shadow-md);
+}
+
+/* Consistent focus ring across every interactive element */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Scroll container for wide financial tables */
+.table-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
 }
 
 /* ==========================================================================
@@ -151,6 +230,12 @@ body {
     font-size: 9.5pt;
     font-weight: 600;
     color: #0b0b0b;
+  }
+
+  /* Tables must never be clipped by their on-screen scroll box */
+  .table-scroll {
+    max-height: none !important;
+    overflow: visible !important;
   }
 
   /* ---------- body ---------- */

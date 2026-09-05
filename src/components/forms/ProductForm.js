@@ -108,7 +108,7 @@ export default function ProductForm({
             />
             <Link
               href="/account/product-categories"
-              className="mt-1 inline-block text-xs font-medium text-indigo-600 hover:text-indigo-700"
+              className="mt-1 inline-block text-xs font-medium text-brand-600 hover:text-brand-700"
             >
               Manage categories
             </Link>

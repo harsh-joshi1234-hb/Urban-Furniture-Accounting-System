@@ -22,7 +22,7 @@ export default function AnalyticalsPage() {
     {
       key: 'name',
       header: 'Analytic Account',
-      render: (row) => <span className="font-medium text-slate-900">{row.name}</span>,
+      render: (row) => <span className="font-medium text-stone-900">{row.name}</span>,
     },
     {
       key: 'type',

@@ -109,14 +109,14 @@ export default function PaymentDialog({
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <FormError error={error} />
 
-        <div className="rounded-md bg-slate-50 px-3 py-2 text-sm">
-          <p className="text-slate-600">
-            Partner: <span className="font-medium text-slate-900">{partner?.name}</span>
+        <div className="rounded-md bg-stone-50 px-3 py-2 text-sm">
+          <p className="text-stone-600">
+            Partner: <span className="font-medium text-stone-900">{partner?.name}</span>
           </p>
           {amountDue !== undefined && (
-            <p className="text-slate-600">
+            <p className="text-stone-600">
               Amount due:{' '}
-              <span className="font-medium text-slate-900">{formatCurrency(amountDue)}</span>
+              <span className="font-medium text-stone-900">{formatCurrency(amountDue)}</span>
             </p>
           )}
         </div>
@@ -170,7 +170,7 @@ export default function PaymentDialog({
         {amountDue !== undefined && Number(amountDue) > 0 && (
           <button
             type="button"
-            className="text-xs font-medium text-indigo-600 hover:text-indigo-700"
+            className="text-xs font-medium text-brand-600 hover:text-brand-700"
             onClick={() => setForm({ ...form, amount: String(amountDue) })}
           >
             Pay full amount due

@@ -203,13 +203,13 @@ export default function BudgetDetailPage() {
         <StatCard
           label="Achieved %"
           value={`${formatNumber(doc.achievedPct, 1)}%`}
-          tone="indigo"
+          tone="brand"
         />
       </div>
 
       <Card className="mt-4" bodyClassName="p-4">
         <ProgressBar value={doc.achievedPct} />
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="mt-2 text-xs text-stone-500">
           Achieved, amount to achieve and percentage are computed by the backend from
           confirmed {doc.type === 'INCOME' ? 'customer invoice' : 'vendor bill'} lines
           carrying this analytic account within the budget period.
@@ -262,7 +262,7 @@ export default function BudgetDetailPage() {
                 onChange={(e) => setDraft({ ...draft, committedAmount: e.target.value })}
               />
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-stone-500">
               Only draft budgets can be edited. The analytic account and responsible contact
               are fixed once created.
             </p>
@@ -282,30 +282,30 @@ export default function BudgetDetailPage() {
         ) : (
           <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Analyticals</dt>
-              <dd className="mt-0.5 text-slate-800">{doc.analyticAccount?.name || '-'}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Analyticals</dt>
+              <dd className="mt-0.5 text-stone-800">{doc.analyticAccount?.name || '-'}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Type</dt>
-              <dd className="mt-0.5 text-slate-800">{doc.type}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Type</dt>
+              <dd className="mt-0.5 text-stone-800">{doc.type}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Responsible</dt>
-              <dd className="mt-0.5 text-slate-800">{doc.responsibleContact?.name || '-'}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Responsible</dt>
+              <dd className="mt-0.5 text-stone-800">{doc.responsibleContact?.name || '-'}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Budget Period</dt>
-              <dd className="mt-0.5 text-slate-800">
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Budget Period</dt>
+              <dd className="mt-0.5 text-stone-800">
                 {formatDate(doc.startDate)} to {formatDate(doc.endDate)}
               </dd>
             </div>
             {doc.revisionOf && (
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Revision Of</dt>
+                <dt className="text-xs uppercase tracking-wide text-stone-500">Revision Of</dt>
                 <dd className="mt-0.5">
                   <Link
                     href={`/account/budgets/${doc.revisionOf.id}`}
-                    className="text-indigo-600 hover:text-indigo-700"
+                    className="text-brand-600 hover:text-brand-700"
                   >
                     {doc.revisionOf.name}
                   </Link>
@@ -314,13 +314,13 @@ export default function BudgetDetailPage() {
             )}
             {doc.revisedBudgets?.length > 0 && (
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Revised With</dt>
+                <dt className="text-xs uppercase tracking-wide text-stone-500">Revised With</dt>
                 <dd className="mt-0.5 space-y-0.5">
                   {doc.revisedBudgets.map((revised) => (
                     <Link
                       key={revised.id}
                       href={`/account/budgets/${revised.id}`}
-                      className="block text-indigo-600 hover:text-indigo-700"
+                      className="block text-brand-600 hover:text-brand-700"
                     >
                       {revised.name}
                     </Link>

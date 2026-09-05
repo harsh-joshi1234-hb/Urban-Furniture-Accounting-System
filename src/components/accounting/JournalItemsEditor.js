@@ -48,30 +48,30 @@ export default function JournalItemsEditor({
     <div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-50">
+          <thead className="bg-stone-50">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Account
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Partner
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Analytic
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Description
               </th>
-              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                 Debit
               </th>
-              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                 Credit
               </th>
               <th className="px-3 py-2" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-stone-100">
             {items.map((item, index) => (
               <tr key={index} className="align-top">
                 <td className="px-3 py-2">
@@ -183,19 +183,19 @@ export default function JournalItemsEditor({
         </table>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-3 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 px-3 py-3">
         <Button variant="secondary" size="sm" onClick={addItem} disabled={disabled}>
           Add line
         </Button>
 
         <div className="flex flex-wrap items-center gap-5 text-right">
           <div>
-            <p className="text-xs uppercase tracking-wide text-slate-500">Total Debit</p>
-            <p className="text-sm font-semibold text-slate-900">{formatCurrency(totalDebit)}</p>
+            <p className="text-xs uppercase tracking-wide text-stone-500">Total Debit</p>
+            <p className="text-sm font-semibold text-stone-900">{formatCurrency(totalDebit)}</p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-wide text-slate-500">Total Credit</p>
-            <p className="text-sm font-semibold text-slate-900">{formatCurrency(totalCredit)}</p>
+            <p className="text-xs uppercase tracking-wide text-stone-500">Total Credit</p>
+            <p className="text-sm font-semibold text-stone-900">{formatCurrency(totalCredit)}</p>
           </div>
           <div
             className={`rounded-md px-3 py-1.5 text-xs font-medium ${

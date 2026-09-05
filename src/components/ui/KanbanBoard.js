@@ -25,13 +25,13 @@ export default function KanbanBoard({
   }
 
   return (
-    <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-slate-50/50">
+    <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-stone-50/50">
       {rows.map((row, index) => (
         <div
           key={getRowKey(row, index)}
           onClick={onRowClick ? () => onRowClick(row) : undefined}
-          className={`bg-white border border-slate-200 rounded-lg p-4 transition-all overflow-hidden flex flex-col ${
-            onRowClick ? 'cursor-pointer hover:border-indigo-300 hover:shadow-sm hover:ring-1 hover:ring-indigo-200' : ''
+          className={`bg-white border border-stone-200 rounded-lg p-4 transition-all overflow-hidden flex flex-col ${
+            onRowClick ? 'cursor-pointer hover:border-brand-300 hover:shadow-sm hover:ring-1 hover:ring-brand-200' : ''
           }`}
         >
           {renderCard(row)}

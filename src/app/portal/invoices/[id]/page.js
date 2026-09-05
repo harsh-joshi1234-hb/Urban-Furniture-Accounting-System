@@ -57,16 +57,16 @@ export default function PortalInvoiceDetailPage() {
       <Card className="mt-4" title="Invoice" actions={<Badge status={inv.status} />} bodyClassName="p-4">
         <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Reference</dt>
-            <dd className="mt-0.5 text-slate-800">{inv.invoiceReference || '-'}</dd>
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Reference</dt>
+            <dd className="mt-0.5 text-stone-800">{inv.invoiceReference || '-'}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Invoice Date</dt>
-            <dd className="mt-0.5 text-slate-800">{formatDate(inv.invoiceDate)}</dd>
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Invoice Date</dt>
+            <dd className="mt-0.5 text-stone-800">{formatDate(inv.invoiceDate)}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Due Date</dt>
-            <dd className="mt-0.5 text-slate-800">{formatDate(inv.dueDate)}</dd>
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Due Date</dt>
+            <dd className="mt-0.5 text-stone-800">{formatDate(inv.dueDate)}</dd>
           </div>
         </dl>
       </Card>
@@ -77,13 +77,13 @@ export default function PortalInvoiceDetailPage() {
 
       <Card title="Payments" className="mt-4">
         {inv.allocations?.length > 0 ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-stone-100">
             {inv.allocations.map((allocation) => (
               <li
                 key={allocation.id}
                 className="flex items-center justify-between px-4 py-3"
               >
-                <p className="text-sm text-slate-600">{formatDate(allocation.createdAt)}</p>
+                <p className="text-sm text-stone-600">{formatDate(allocation.createdAt)}</p>
                 <p className="text-sm font-medium text-emerald-600">
                   {formatCurrency(allocation.allocatedAmount)}
                 </p>
@@ -91,7 +91,7 @@ export default function PortalInvoiceDetailPage() {
             ))}
           </ul>
         ) : (
-          <p className="px-4 py-6 text-center text-sm text-slate-500">
+          <p className="px-4 py-6 text-center text-sm text-stone-500">
             No payments recorded against this invoice yet.
           </p>
         )}
@@ -100,9 +100,9 @@ export default function PortalInvoiceDetailPage() {
       {/* Razorpay Online Payment Section */}
       {isPayable && (
         <Card title="Pay Online" className="mt-4" bodyClassName="p-6">
-          <p className="text-sm text-slate-500 mb-4">
+          <p className="text-sm text-stone-500 mb-4">
             Pay securely online. Amount due:{' '}
-            <span className="font-semibold text-slate-700">{formatCurrency(amountDue)}</span>
+            <span className="font-semibold text-stone-700">{formatCurrency(amountDue)}</span>
           </p>
           <RazorpayCheckoutButton
             invoice={inv}
@@ -117,7 +117,7 @@ export default function PortalInvoiceDetailPage() {
           <div className="px-4 py-6 text-center">
             <p className="text-2xl mb-2">✅</p>
             <p className="font-semibold text-emerald-700">Invoice Fully Paid</p>
-            <p className="text-sm text-slate-500 mt-1">Thank you for your payment</p>
+            <p className="text-sm text-stone-500 mt-1">Thank you for your payment</p>
           </div>
         </Card>
       )}

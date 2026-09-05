@@ -59,7 +59,7 @@ export default function AccountDetailPage() {
           <StatCard
             label="Balance"
             value={formatCurrency(balance.data?.balance)}
-            tone="indigo"
+            tone="brand"
             hint={`Normal balance for ${titleCase(acc.type)}`}
           />
         </div>
@@ -68,24 +68,24 @@ export default function AccountDetailPage() {
       <Card className="mt-4" title="Account details" actions={<Badge status={acc.isActive ? 'ACTIVE' : 'INACTIVE'} />} bodyClassName="p-4">
         <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Code</dt>
-            <dd className="mt-0.5 font-medium text-slate-900">{acc.code}</dd>
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Code</dt>
+            <dd className="mt-0.5 font-medium text-stone-900">{acc.code}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Name</dt>
-            <dd className="mt-0.5 text-slate-800">{acc.name}</dd>
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Name</dt>
+            <dd className="mt-0.5 text-stone-800">{acc.name}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Type</dt>
-            <dd className="mt-0.5 text-slate-800">{titleCase(acc.type)}</dd>
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Type</dt>
+            <dd className="mt-0.5 text-stone-800">{titleCase(acc.type)}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Parent</dt>
-            <dd className="mt-0.5 text-slate-800">
+            <dt className="text-xs uppercase tracking-wide text-stone-500">Parent</dt>
+            <dd className="mt-0.5 text-stone-800">
               {acc.parent ? (
                 <Link
                   href={`/account/chart-of-accounts/${acc.parent.id}`}
-                  className="text-indigo-600 hover:text-indigo-700"
+                  className="text-brand-600 hover:text-brand-700"
                 >
                   {acc.parent.code} - {acc.parent.name}
                 </Link>
@@ -99,14 +99,14 @@ export default function AccountDetailPage() {
 
       <Card title="Sub-accounts" className="mt-4">
         {acc.children?.length > 0 ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-stone-100">
             {acc.children.map((child) => (
               <li key={child.id}>
                 <Link
                   href={`/account/chart-of-accounts/${child.id}`}
-                  className="flex items-center justify-between px-4 py-3 hover:bg-slate-50"
+                  className="flex items-center justify-between px-4 py-3 hover:bg-stone-50"
                 >
-                  <span className="text-sm text-slate-800">
+                  <span className="text-sm text-stone-800">
                     {child.code} - {child.name}
                   </span>
                   <Badge status={child.isActive ? 'ACTIVE' : 'INACTIVE'} />

@@ -54,38 +54,38 @@ export default function LineItemsEditor({
     <div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-50">
+          <thead className="bg-stone-50">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Sr.
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Product
               </th>
               {showAccount && (
-                <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                   Chart of Account
                 </th>
               )}
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-stone-500">
                 Budget Analytics
               </th>
-              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                 Qty
               </th>
-              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                 Unit Price
               </th>
-              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-slate-500">
+              <th className="px-3 py-2 text-right text-xs font-semibold uppercase text-stone-500">
                 Total
               </th>
               <th className="px-3 py-2" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-stone-100">
             {lines.map((line, index) => (
               <tr key={index} className="align-top">
-                <td className="px-3 py-2 text-slate-500">{index + 1}.</td>
+                <td className="px-3 py-2 text-stone-500">{index + 1}.</td>
                 <td className="px-3 py-2">
                   <select
                     className={baseInput}
@@ -180,7 +180,7 @@ export default function LineItemsEditor({
                     </p>
                   )}
                 </td>
-                <td className="px-3 py-2 text-right text-slate-700">
+                <td className="px-3 py-2 text-right text-stone-700">
                   {formatCurrency(previewTotal(line))}
                 </td>
                 <td className="px-3 py-2 text-right">
@@ -200,16 +200,16 @@ export default function LineItemsEditor({
         </table>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-3 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 px-3 py-3">
         <Button variant="secondary" size="sm" onClick={addLine} disabled={disabled}>
           Add line
         </Button>
         <div className="text-right">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Preview total</p>
-          <p className="text-base font-semibold text-slate-900">
+          <p className="text-xs uppercase tracking-wide text-stone-500">Preview total</p>
+          <p className="text-base font-semibold text-stone-900">
             {formatCurrency(grandPreview)}
           </p>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-stone-400">
             Final totals are computed by the backend on save.
           </p>
         </div>

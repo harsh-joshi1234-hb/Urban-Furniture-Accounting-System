@@ -162,7 +162,7 @@ export default function SalesOrderDetailPage() {
                 onChange={(e) => setDraft({ ...draft, orderDate: e.target.value })}
               />
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-stone-500">
               Only the draft header can be edited. Lines are fixed once the order is created.
             </p>
             <div className="flex gap-2">
@@ -181,16 +181,16 @@ export default function SalesOrderDetailPage() {
         ) : (
           <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">SO No.</dt>
-              <dd className="mt-0.5 font-medium text-slate-900">{so.number}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">SO No.</dt>
+              <dd className="mt-0.5 font-medium text-stone-900">{so.number}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Customer</dt>
-              <dd className="mt-0.5 text-slate-800">{so.customer?.name || '-'}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Customer</dt>
+              <dd className="mt-0.5 text-stone-800">{so.customer?.name || '-'}</dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">Order Date</dt>
-              <dd className="mt-0.5 text-slate-800">{formatDate(so.orderDate)}</dd>
+              <dt className="text-xs uppercase tracking-wide text-stone-500">Order Date</dt>
+              <dd className="mt-0.5 text-stone-800">{formatDate(so.orderDate)}</dd>
             </div>
           </dl>
         )}
@@ -202,14 +202,14 @@ export default function SalesOrderDetailPage() {
 
       {so.invoices?.length > 0 && (
         <Card title="Invoices from this order" className="mt-4">
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-stone-100">
             {so.invoices.map((invoice) => (
               <li key={invoice.id}>
                 <Link
                   href={`/sales/invoices/${invoice.id}`}
-                  className="flex items-center justify-between px-4 py-3 hover:bg-slate-50"
+                  className="flex items-center justify-between px-4 py-3 hover:bg-stone-50"
                 >
-                  <span className="text-sm font-medium text-slate-800">{invoice.number}</span>
+                  <span className="text-sm font-medium text-stone-800">{invoice.number}</span>
                   <Badge status={invoice.status} />
                 </Link>
               </li>

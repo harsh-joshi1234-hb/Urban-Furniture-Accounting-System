@@ -80,8 +80,8 @@ export default function SignupPage() {
 
   return (
     <div>
-      <h2 className="text-base font-semibold text-slate-900">Sign up</h2>
-      <p className="mt-1 text-sm text-slate-500">
+      <h2 className="text-base font-semibold text-stone-900">Sign up</h2>
+      <p className="mt-1 text-sm text-stone-500">
         Creates a customer portal user. Internal staff accounts are created by an Admin.
       </p>
 
@@ -142,9 +142,9 @@ export default function SignupPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
+      <p className="mt-4 text-center text-sm text-stone-500">
         Already registered?{' '}
-        <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-700">
+        <Link href="/login" className="font-medium text-brand-600 hover:text-brand-700">
           Sign in
         </Link>
       </p>
