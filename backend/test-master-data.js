@@ -1,3 +1,4 @@
+
 const assert = require('assert');
 
 async function run() {
@@ -49,7 +50,7 @@ async function run() {
   res = await fetch('http://localhost:5000/api/product-categories', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-    body: JSON.stringify({ name: 'Chairs' })
+    body: JSON.stringify({ name: `Electronics ${Date.now()}` })
   });
   data = await res.json();
   assert.equal(res.status, 201);

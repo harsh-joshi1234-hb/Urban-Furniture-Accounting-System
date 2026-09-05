@@ -85,6 +85,7 @@ const validateLines = async (tx, lines) => {
   let hasCredit = false;
 
   for (const line of lines) {
+  
     if (line.debit < 0 || line.credit < 0) throw new Error('BAD_REQUEST: Debit and credit must be non-negative');
     if (line.debit > 0 && line.credit > 0) throw new Error('BAD_REQUEST: A line cannot contain both debit and credit');
     

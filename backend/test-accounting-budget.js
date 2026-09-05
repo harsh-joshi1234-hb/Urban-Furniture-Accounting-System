@@ -216,7 +216,7 @@ async function run() {
   res = await fetch('http://localhost:5000/api/analytic-accounts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-    body: JSON.stringify({ name: `Analytic Budget ${Date.now()}` })
+    body: JSON.stringify({ name: `Analytic Budget ${Date.now()}`, type: 'EXPENSE' })
   });
   const analyticId = (await res.json()).data.id;
 
