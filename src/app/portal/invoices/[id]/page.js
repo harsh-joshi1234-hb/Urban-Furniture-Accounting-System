@@ -1,20 +1,16 @@
 'use client';
 
-import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useApiResource } from '@/hooks/useApiResource';
 import portalService from '@/services/portal.service';
+import { useAuth } from '@/context/AuthContext';
 import PageHeader from '@/components/ui/PageHeader';
 import Card, { StatCard } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
-import Modal from '@/components/ui/Modal';
 import Loading from '@/components/ui/Loading';
-import ErrorState, { FormError } from '@/components/ui/ErrorState';
+import ErrorState from '@/components/ui/ErrorState';
 import DocumentLines from '@/components/DocumentLines';
-import { TextField } from '@/components/ui/Field';
-import useSubmit from '@/hooks/useSubmit';
-import { useToast } from '@/context/ToastContext';
+import RazorpayCheckoutButton from '@/components/RazorpayCheckoutButton';
 import {
   formatCurrency,
   formatDate,
@@ -24,22 +20,10 @@ import {
 
 export default function PortalInvoiceDetailPage() {
   const { id } = useParams();
-  const toast = useToast();
-  const [payOpen, setPayOpen] = useState(false);
-  const [amount, setAmount] = useState('');
-  const [amountError, setAmountError] = useState(null);
+  const { user } = useAuth();
 
-  // The backend answers 404 for an invoice that belongs to another customer.
+  // Backend answers 404 for an invoice belonging to another customer (IDOR protection)
   const invoice = useApiResource(() => portalService.invoice(id), [id]);
-
-  const pay = useSubmit(() => portalService.initiatePayment(id, Number(amount)), {
-    onSuccess: () => {
-      setPayOpen(false);
-      setAmount('');
-      toast.success('Payment initiated. It will show once the provider confirms it.');
-      invoice.reload();
-    },
-  });
 
   if (invoice.loading) return <Loading label="Loading invoice..." />;
   if (invoice.error) return <ErrorState error={invoice.error} onRetry={invoice.reload} />;
@@ -49,21 +33,7 @@ export default function PortalInvoiceDetailPage() {
   const total = sumLineTotals(inv.lines);
   const paid = sumAllocations(inv.allocations);
   const amountDue = Math.max(total - paid, 0);
-
-  const onPay = (event) => {
-    event.preventDefault();
-    const value = Number(amount);
-    if (!amount || Number.isNaN(value) || value <= 0) {
-      setAmountError('Amount must be greater than 0');
-      return;
-    }
-    if (value > amountDue) {
-      setAmountError(`Cannot exceed the amount due (${formatCurrency(amountDue)})`);
-      return;
-    }
-    setAmountError(null);
-    pay.submit();
-  };
+  const isPayable = inv.status === 'CONFIRMED' || inv.status === 'PARTIALLY_PAID';
 
   return (
     <div className="max-w-4xl">
@@ -72,9 +42,6 @@ export default function PortalInvoiceDetailPage() {
         subtitle={`Invoice date ${formatDate(inv.invoiceDate)}`}
         backHref="/portal/invoices"
         backLabel="My invoices"
-        actions={
-          amountDue > 0 ? <Button onClick={() => setPayOpen(true)}>Pay now</Button> : null
-        }
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -130,52 +97,30 @@ export default function PortalInvoiceDetailPage() {
         )}
       </Card>
 
-      <Modal
-        open={payOpen}
-        onClose={pay.submitting ? undefined : () => setPayOpen(false)}
-        title="Pay this invoice"
-        description={`Amount due ${formatCurrency(amountDue)}`}
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              onClick={() => setPayOpen(false)}
-              disabled={pay.submitting}
-            >
-              Cancel
-            </Button>
-            <Button onClick={onPay} loading={pay.submitting}>
-              Continue to payment
-            </Button>
-          </>
-        }
-      >
-        <form onSubmit={onPay} className="space-y-4" noValidate>
-          <FormError error={pay.error} />
-          <TextField
-            label="Amount"
-            name="amount"
-            type="number"
-            min="0"
-            step="0.01"
-            required
-            value={amount}
-            error={amountError}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-          <button
-            type="button"
-            className="text-xs font-medium text-indigo-600 hover:text-indigo-700"
-            onClick={() => setAmount(String(amountDue))}
-          >
-            Pay full amount due
-          </button>
-          <p className="text-xs text-slate-500">
-            The payment is handled by the payment provider. Your invoice status updates once
-            the provider confirms it.
+      {/* Razorpay Online Payment Section */}
+      {isPayable && (
+        <Card title="Pay Online" className="mt-4" bodyClassName="p-6">
+          <p className="text-sm text-slate-500 mb-4">
+            Pay securely online. Amount due:{' '}
+            <span className="font-semibold text-slate-700">{formatCurrency(amountDue)}</span>
           </p>
-        </form>
-      </Modal>
+          <RazorpayCheckoutButton
+            invoice={inv}
+            customer={{ name: user?.name, email: user?.email }}
+            onPaymentComplete={invoice.reload}
+          />
+        </Card>
+      )}
+
+      {inv.status === 'PAID' && (
+        <Card className="mt-4 border-emerald-200 bg-emerald-50">
+          <div className="px-4 py-6 text-center">
+            <p className="text-2xl mb-2">✅</p>
+            <p className="font-semibold text-emerald-700">Invoice Fully Paid</p>
+            <p className="text-sm text-slate-500 mt-1">Thank you for your payment</p>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

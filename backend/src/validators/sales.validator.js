@@ -90,9 +90,28 @@ const validateAllocation = (req, res, next) => {
   next();
 };
 
+const validateRazorpayOrderRequest = (req, res, next) => {
+  const { invoiceId } = req.body;
+  if (!invoiceId) {
+    return res.status(400).json({ success: false, message: 'invoiceId is required' });
+  }
+  next();
+};
+
+const validateRazorpayVerifyRequest = (req, res, next) => {
+  const { paymentId, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+  if (!paymentId) return res.status(400).json({ success: false, message: 'paymentId is required' });
+  if (!razorpayOrderId) return res.status(400).json({ success: false, message: 'razorpayOrderId is required' });
+  if (!razorpayPaymentId) return res.status(400).json({ success: false, message: 'razorpayPaymentId is required' });
+  if (!razorpaySignature) return res.status(400).json({ success: false, message: 'razorpaySignature is required' });
+  next();
+};
+
 module.exports = {
   validateSalesOrder,
   validateCustomerInvoice,
   validatePayment,
-  validateAllocation
+  validateAllocation,
+  validateRazorpayOrderRequest,
+  validateRazorpayVerifyRequest
 };

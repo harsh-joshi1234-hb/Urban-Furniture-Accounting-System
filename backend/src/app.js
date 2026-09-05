@@ -28,6 +28,7 @@ const journalEntryRoutes = require('./routes/journalEntry.routes');
 const reportRoutes = require('./routes/report.routes');
 const portalRoutes = require('./routes/portal.routes');
 const uploadRoutes = require('./routes/upload.routes');
+const razorpayWebhookRoute = require('./routes/razorpayWebhook.routes');
 
 const app = express();
 
@@ -36,6 +37,15 @@ app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({
   origin: env.FRONTEND_URL,
 }));
+// ⚠️  Razorpay webhook MUST be registered before express.json() so we receive
+// the raw request body. Signature verification requires the unmodified bytes.
+app.use(
+  '/api/payments/razorpay/webhook',
+  express.raw({ type: 'application/json' }),
+  razorpayWebhookRoute
+);
+
+// General middleware (after webhook raw-body exception)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
