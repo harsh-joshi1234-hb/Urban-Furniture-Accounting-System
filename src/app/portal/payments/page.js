@@ -22,12 +22,31 @@ export default function PortalPaymentsPage() {
         invoiceNumber: invoice.number,
         amount: allocation.allocatedAmount,
         createdAt: allocation.createdAt,
+        // Calculate due amount for the invoice
+        invoiceTotal: invoice.lines?.reduce((sum, line) => sum + Number(line.total), 0) || 0,
+        invoiceAllocated: invoice.allocations?.reduce((sum, alloc) => sum + Number(alloc.allocatedAmount), 0) || 0,
       })),
     )
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+  // The first element is the latest
+  const latestId = payments[0]?.id;
+
   const columns = [
-    { key: 'createdAt', header: 'Date', render: (row) => formatDate(row.createdAt) },
+    { 
+      key: 'createdAt', 
+      header: 'Date', 
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <span>{formatDate(row.createdAt)}</span>
+          {row.id === latestId && (
+            <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+              Latest
+            </span>
+          )}
+        </div>
+      )
+    },
     {
       key: 'invoiceNumber',
       header: 'Invoice',
@@ -42,11 +61,24 @@ export default function PortalPaymentsPage() {
     },
     {
       key: 'amount',
-      header: 'Amount',
+      header: 'Amount Paid',
       align: 'right',
       render: (row) => (
-        <span className="font-medium text-emerald-600">{formatCurrency(row.amount)}</span>
+        <span className="font-bold text-emerald-600">{formatCurrency(row.amount)}</span>
       ),
+    },
+    {
+      key: 'due',
+      header: 'Invoice Due',
+      align: 'right',
+      render: (row) => {
+        const due = Math.max(0, row.invoiceTotal - row.invoiceAllocated);
+        return due > 0 ? (
+          <span className="font-semibold text-rose-600">{formatCurrency(due)}</span>
+        ) : (
+          <span className="text-slate-500">Paid in full</span>
+        );
+      },
     },
   ];
 

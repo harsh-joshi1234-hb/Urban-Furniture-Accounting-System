@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const prisma = require('../config/prisma');
 const { generateAccessToken } = require('../utils/jwt.util');
 const { generateResetToken, hashToken } = require('../utils/crypto.util');
+const emailService = require('../services/email.service');
 
 const signup = async (req, res, next) => {
   try {
@@ -141,8 +142,21 @@ const forgotPassword = async (req, res, next) => {
         },
       });
 
-      // In production, send email here with resetToken
-      console.log(`[DEV ONLY] Password reset token for ${email}: ${resetToken}`);
+      // Only the hash is stored; the raw token leaves the system by email only.
+      // Delivery failures are logged but never change the response, so this
+      // endpoint cannot be used to discover which addresses are registered.
+      const result = await emailService.sendPasswordResetEmail({
+        to: user.email,
+        name: user.name,
+        token: resetToken,
+        expiresAt,
+      });
+
+      if (!result.delivered) {
+        console.error(
+          `[auth] Password reset email for ${user.email} was not delivered: ${result.reason}`,
+        );
+      }
     }
 
     res.status(200).json({
