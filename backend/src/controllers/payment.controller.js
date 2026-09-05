@@ -1,9 +1,9 @@
 const paymentService = require('../services/payment.service');
 const auditService = require('../services/audit.service');
 
-const createCustomerPayment = async (req, res, next) => {
+const createPayment = async (req, res, next) => {
   try {
-    const pay = await paymentService.createCustomerPayment(req.user.id, req.body);
+    const pay = await paymentService.createPayment(req.user.id, req.body);
     await auditService.log({ userId: req.user.id, entityType: 'Payment', entityId: pay.id, action: 'PAYMENT_CREATE', newValues: pay });
     res.status(201).json({ success: true, message: 'Payment created', data: pay });
   } catch (error) {
@@ -24,4 +24,4 @@ const allocatePayment = async (req, res, next) => {
   }
 };
 
-module.exports = { createCustomerPayment, allocatePayment };
+module.exports = { createPayment, allocatePayment };

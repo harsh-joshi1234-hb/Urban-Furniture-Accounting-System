@@ -19,12 +19,12 @@ async function run() {
   data = await res.json();
   const userToken = data.data.token;
 
-  // 1. CONTACTS
+  // 1. Create Contact
   console.log('Testing Contact Creation (Admin)...');
   res = await fetch('http://localhost:5000/api/contacts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-    body: JSON.stringify({ name: 'Test Customer', type: 'CUSTOMER', email: 'cust1@example.com' })
+    body: JSON.stringify({ name: 'Acme Corp', type: 'VENDOR', email: `acme_${Date.now()}@example.com` })
   });
   data = await res.json();
   assert.equal(res.status, 201);

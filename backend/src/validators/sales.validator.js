@@ -45,8 +45,23 @@ const validateCustomerInvoice = (req, res, next) => {
 };
 
 const validatePayment = (req, res, next) => {
-  const { partnerId, amount, paymentDate, paymentMethod } = req.body;
+  const { partnerId, paymentType, partnerType, amount, paymentDate, paymentMethod } = req.body;
   if (!partnerId) return res.status(400).json({ success: false, message: 'partnerId is required' });
+  
+  // New validation for paymentType and partnerType
+  if (!['RECEIVE', 'SEND'].includes(paymentType)) {
+    return res.status(400).json({ success: false, message: 'Invalid paymentType' });
+  }
+  if (!['CUSTOMER', 'VENDOR'].includes(partnerType)) {
+    return res.status(400).json({ success: false, message: 'Invalid partnerType' });
+  }
+  if (paymentType === 'RECEIVE' && partnerType !== 'CUSTOMER') {
+    return res.status(400).json({ success: false, message: 'RECEIVE must be for a CUSTOMER' });
+  }
+  if (paymentType === 'SEND' && partnerType !== 'VENDOR') {
+    return res.status(400).json({ success: false, message: 'SEND must be for a VENDOR' });
+  }
+
   if (amount === undefined || Number(amount) <= 0) {
     return res.status(400).json({ success: false, message: 'Amount must be greater than 0' });
   }
@@ -59,11 +74,16 @@ const validatePayment = (req, res, next) => {
 };
 
 const validateAllocation = (req, res, next) => {
-  const { documentType, customerInvoiceId, allocatedAmount } = req.body;
-  if (documentType !== 'CUSTOMER_INVOICE') {
-    return res.status(400).json({ success: false, message: 'Only CUSTOMER_INVOICE allocation is supported in this phase' });
+  const { documentType, customerInvoiceId, vendorBillId, allocatedAmount } = req.body;
+  if (!['CUSTOMER_INVOICE', 'VENDOR_BILL'].includes(documentType)) {
+    return res.status(400).json({ success: false, message: 'Invalid documentType' });
   }
-  if (!customerInvoiceId) return res.status(400).json({ success: false, message: 'customerInvoiceId is required' });
+  if (documentType === 'CUSTOMER_INVOICE' && !customerInvoiceId) {
+    return res.status(400).json({ success: false, message: 'customerInvoiceId is required for CUSTOMER_INVOICE' });
+  }
+  if (documentType === 'VENDOR_BILL' && !vendorBillId) {
+    return res.status(400).json({ success: false, message: 'vendorBillId is required for VENDOR_BILL' });
+  }
   if (allocatedAmount === undefined || Number(allocatedAmount) <= 0) {
     return res.status(400).json({ success: false, message: 'Allocated amount must be greater than 0' });
   }

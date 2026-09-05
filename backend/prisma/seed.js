@@ -23,6 +23,13 @@ const ALL_PERMISSIONS = [
   { code: 'invoice.cancel', name: 'Cancel Invoice', module: 'Sales' },
   { code: 'invoice.pay', name: 'Pay Invoice', module: 'Sales' },
   
+  // Purchase Orders
+  { code: 'purchase_order.create', name: 'Create Purchase Order', module: 'Purchase' },
+  { code: 'purchase_order.read', name: 'Read Purchase Order', module: 'Purchase' },
+  { code: 'purchase_order.update', name: 'Update Purchase Order', module: 'Purchase' },
+  { code: 'purchase_order.confirm', name: 'Confirm Purchase Order', module: 'Purchase' },
+  { code: 'purchase_order.cancel', name: 'Cancel Purchase Order', module: 'Purchase' },
+  
   // Bills
   { code: 'bill.create', name: 'Create Bill', module: 'Purchase' },
   { code: 'bill.read', name: 'Read Bill', module: 'Purchase' },
@@ -181,6 +188,17 @@ async function main() {
     },
   });
   console.log(`Ensured ChartOfAccount ${salesAccount.code} exists.`);
+
+  const expenseAccount = await prisma.chartOfAccount.upsert({
+    where: { code: '500000' },
+    update: {},
+    create: {
+      code: '500000',
+      name: 'Goods Purchased',
+      type: 'EXPENSE',
+    },
+  });
+  console.log(`Ensured ChartOfAccount ${expenseAccount.code} exists.`);
 
   console.log('Seed completed successfully.');
 }
