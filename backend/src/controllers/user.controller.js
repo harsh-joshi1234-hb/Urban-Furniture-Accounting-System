@@ -97,6 +97,22 @@ const activateUser = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // verify the user is already inactive
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    if (user.isActive) {
+      return res.status(400).json({ success: false, message: 'Only deactivated users can be deleted' });
+    }
+    await prisma.user.delete({ where: { id } });
+    res.status(200).json({ success: true, message: 'User deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -104,4 +120,5 @@ module.exports = {
   updateUser,
   deactivateUser,
   activateUser,
+  deleteUser,
 };

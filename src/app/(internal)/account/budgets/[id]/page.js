@@ -15,6 +15,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import Modal from '@/components/ui/Modal';
 import { TextField } from '@/components/ui/Field';
 import ProgressBar from '@/components/accounting/ProgressBar';
+import PieChartModal from '@/components/ui/PieChartModal';
 import useSubmit from '@/hooks/useSubmit';
 import { useToast } from '@/context/ToastContext';
 import { formatCurrency, formatDate, formatNumber, toDateInput } from '@/utils/format';
@@ -27,6 +28,7 @@ export default function BudgetDetailPage() {
   const [confirmAction, setConfirmAction] = useState(null);
   const [editing, setEditing] = useState(false);
   const [revising, setRevising] = useState(false);
+  const [pieChartOpen, setPieChartOpen] = useState(false);
   const [draft, setDraft] = useState({
     name: '',
     committedAmount: '',
@@ -164,6 +166,12 @@ export default function BudgetDetailPage() {
         backLabel="Budgets"
         actions={
           <>
+            <Button variant="secondary" onClick={() => setPieChartOpen(true)} title="View Budget Chart">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 -mx-1">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+              </svg>
+            </Button>
             {isDraft && !editing && (
               <Button variant="secondary" onClick={startEdit}>
                 Edit
@@ -386,6 +394,12 @@ export default function BudgetDetailPage() {
         loading={cancelBudget.submitting}
         onConfirm={() => cancelBudget.submit()}
         onCancel={() => setConfirmAction(null)}
+      />
+
+      <PieChartModal 
+        isOpen={pieChartOpen} 
+        data={doc} 
+        onClose={() => setPieChartOpen(false)} 
       />
     </div>
   );

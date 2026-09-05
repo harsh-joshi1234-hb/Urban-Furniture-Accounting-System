@@ -16,5 +16,6 @@ router.post('/', requirePermission('user.create'), createUserValidator, userCont
 router.patch('/:id', requirePermission('user.update'), userController.updateUser);
 router.patch('/:id/deactivate', requirePermission('user.deactivate'), userController.deactivateUser);
 router.patch('/:id/activate', requirePermission('user.update'), userController.activateUser);
+router.delete('/:id', requirePermission('user.delete'), userController.deleteUser);
 
 module.exports = router;

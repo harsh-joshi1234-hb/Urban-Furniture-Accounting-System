@@ -7,6 +7,7 @@ export const userService = {
   update: (id, payload) => api.patch(`/users/${id}`, payload),
   activate: (id) => api.patch(`/users/${id}/activate`),
   deactivate: (id) => api.patch(`/users/${id}/deactivate`),
+  delete: (id) => api.del(`/users/${id}`),
   roles: () => api.get('/roles'),
 };
 

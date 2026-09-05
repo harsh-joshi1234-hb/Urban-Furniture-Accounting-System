@@ -28,6 +28,7 @@ function UsersScreen() {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState(null);
   const [toggling, setToggling] = useState(null);
+  const [deleting, setDeleting] = useState(null);
   const [form, setForm] = useState({
     name: '',
     loginId: '',
@@ -109,6 +110,21 @@ function UsersScreen() {
     },
   );
 
+  const deleteUser = useSubmit(
+    () => userService.delete(deleting.id),
+    {
+      onSuccess: () => {
+        toast.success('User deleted');
+        setDeleting(null);
+        users.reload();
+      },
+      onError: (err) => {
+        setDeleting(null);
+        toast.error(err.message);
+      },
+    }
+  );
+
   const validate = ({ requirePassword }) => {
     const errors = {};
     if (requirePassword) {
@@ -170,6 +186,15 @@ function UsersScreen() {
           >
             {row.isActive ? 'Deactivate' : 'Activate'}
           </Button>
+          {!row.isActive && (
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => setDeleting(row)}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       ),
     },
@@ -320,6 +345,17 @@ function UsersScreen() {
         loading={toggleActive.submitting}
         onConfirm={() => toggleActive.submit()}
         onCancel={() => setToggling(null)}
+      />
+
+      <ConfirmDialog
+        open={Boolean(deleting)}
+        title="Delete this user?"
+        message={`Are you sure you want to permanently delete ${deleting?.loginId}? This action cannot be undone.`}
+        confirmLabel="Delete permanently"
+        variant="danger"
+        loading={deleteUser.submitting}
+        onConfirm={() => deleteUser.submit()}
+        onCancel={() => setDeleting(null)}
       />
     </div>
   );

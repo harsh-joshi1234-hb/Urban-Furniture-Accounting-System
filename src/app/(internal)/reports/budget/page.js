@@ -9,9 +9,12 @@ import contactService from '@/services/contact.api';
 import PageHeader from '@/components/ui/PageHeader';
 import Card from '@/components/ui/Card';
 import Table from '@/components/ui/Table';
+import KanbanBoard from '@/components/ui/KanbanBoard';
+import ViewToggle from '@/components/ui/ViewToggle';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import ProgressBar from '@/components/accounting/ProgressBar';
+import PieChartModal from '@/components/ui/PieChartModal';
 import { SelectField, TextField } from '@/components/ui/Field';
 import { formatCurrency, formatDate, formatNumber } from '@/utils/format';
 import { ANALYTIC_TYPES, BUDGET_STATUSES } from '@/utils/constants';
@@ -25,6 +28,8 @@ export default function BudgetReportPage() {
     responsibleContactId: '',
     status: '',
   });
+  const [viewMode, setViewMode] = useState('list');
+  const [pieChartData, setPieChartData] = useState(null);
 
   const analytics = useApiResource(() => analyticAccountService.list(), []);
   const contacts = useApiResource(() => contactService.list(), []);
@@ -108,6 +113,27 @@ export default function BudgetReportPage() {
     },
     { key: 'responsible', header: 'Responsible', render: (row) => row.responsible || '-' },
     { key: 'status', header: 'Status', render: (row) => <Badge status={row.status} /> },
+    {
+      key: 'pieChart',
+      header: 'Pie Chart',
+      render: (row) => (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setPieChartData(row);
+          }}
+          className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+          title="View Budget Chart"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+          </svg>
+        </button>
+      ),
+    },
   ];
 
   return (
@@ -116,9 +142,12 @@ export default function BudgetReportPage() {
         title="Budget Report"
         subtitle="Committed against achieved, computed by the backend for each budget."
         actions={
-          <Button variant="secondary" onClick={() => window.print()}>
-            Print
-          </Button>
+          <div className="flex items-center gap-3">
+            <ViewToggle viewMode={viewMode} onChange={setViewMode} />
+            <Button variant="secondary" onClick={() => window.print()}>
+              Print
+            </Button>
+          </div>
         }
       />
 
@@ -201,25 +230,102 @@ export default function BudgetReportPage() {
           )}
         </div>
 
-        <Table
-          columns={columns}
-          rows={report.data?.budgets ?? []}
-          loading={report.loading}
-          error={report.error}
-          onRetry={report.reload}
-          emptyTitle="No budgets in this report"
-          emptyDescription={
-            hasFilters
-              ? 'No budget matches the selected filters.'
-              : 'Create and confirm a budget to see it here.'
-          }
-          emptyAction={
-            <Link href="/account/budgets/new">
-              <Button size="sm">New budget</Button>
-            </Link>
-          }
-        />
+        {viewMode === 'list' ? (
+          <Table
+            columns={columns}
+            rows={report.data?.budgets ?? []}
+            loading={report.loading}
+            error={report.error}
+            onRetry={report.reload}
+            emptyTitle="No budgets in this report"
+            emptyDescription={
+              hasFilters
+                ? 'No budget matches the selected filters.'
+                : 'Create and confirm a budget to see it here.'
+            }
+            emptyAction={
+              <Link href="/account/budgets/new">
+                <Button size="sm">New budget</Button>
+              </Link>
+            }
+          />
+        ) : (
+          <KanbanBoard
+            rows={report.data?.budgets ?? []}
+            loading={report.loading}
+            error={report.error}
+            onRetry={report.reload}
+            emptyTitle="No budgets in this report"
+            emptyDescription={
+              hasFilters
+                ? 'No budget matches the selected filters.'
+                : 'Create and confirm a budget to see it here.'
+            }
+            emptyAction={
+              <Link href="/account/budgets/new">
+                <Button size="sm">New budget</Button>
+              </Link>
+            }
+            renderCard={(row) => (
+              <div className="flex flex-col h-full">
+                <div className="flex items-start justify-between mb-3">
+                  <Link href={`/account/budgets/${row.id}`} className="font-semibold text-slate-900 hover:text-indigo-600 truncate">
+                    {row.name}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setPieChartData(row);
+                    }}
+                    className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-indigo-600 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="flex justify-between items-center mb-3">
+                  <Badge tone={row.type === 'INCOME' ? 'green' : 'amber'}>{row.type}</Badge>
+                  <Badge status={row.status} />
+                </div>
+
+                <div className="text-sm text-slate-500 mb-4">
+                  <span className="block">{formatDate(row.startDate)} - {formatDate(row.endDate)}</span>
+                  {row.analyticAccount && <span className="block mt-1">Analytic: <span className="font-medium text-slate-700">{row.analyticAccount}</span></span>}
+                </div>
+
+                <div className="mt-auto space-y-2 text-sm border-t border-slate-100 pt-3">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Committed:</span>
+                    <span className="font-medium text-slate-900">{formatCurrency(row.committedAmount)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Achieved:</span>
+                    <span className="font-medium text-slate-900">{formatCurrency(row.achievedAmount)}</span>
+                  </div>
+                  <div className="mt-2">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-500">Progress</span>
+                      <span className="font-medium">{formatNumber(row.achievedPct, 1)}%</span>
+                    </div>
+                    <ProgressBar value={row.achievedPct} />
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        )}
       </Card>
+
+      <PieChartModal 
+        isOpen={!!pieChartData} 
+        data={pieChartData} 
+        onClose={() => setPieChartData(null)} 
+      />
     </div>
   );
 }

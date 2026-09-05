@@ -32,7 +32,7 @@ const uploadRoutes = require('./routes/upload.routes');
 const app = express();
 
 // Middleware
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({
   origin: env.FRONTEND_URL,
 }));
