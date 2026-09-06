@@ -32,11 +32,34 @@ const razorpayWebhookRoute = require('./routes/razorpayWebhook.routes');
 
 const app = express();
 
-// Middleware
-app.use(helmet({ crossOriginResourcePolicy: false }));
-app.use(cors({
-  origin: env.FRONTEND_URL,
-}));
+// CORS Configuration - supports single URL, comma-separated URLs, and Vercel previews
+const configuredOrigins = (env.FRONTEND_URL || 'http://localhost:3000')
+  .split(',')
+  .map((url) => url.trim().replace(/\/+$/, ''))
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+
+      const isAllowed =
+        configuredOrigins.includes(origin) ||
+        configuredOrigins.includes('*') ||
+        /\.vercel\.app$/.test(origin);
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS blocked request from origin: ${origin}`));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 // ⚠️  Razorpay webhook MUST be registered before express.json() so we receive
 // the raw request body. Signature verification requires the unmodified bytes.
 app.use(
