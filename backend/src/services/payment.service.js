@@ -15,6 +15,14 @@ async function generatePaymentNumber() {
   return `PAY/2026/${nextNum.toString().padStart(4, '0')}`;
 }
 
+const listPayments = async () => {
+  return await prisma.payment.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: { partner: true, allocations: true },
+    take: 50
+  });
+};
+
 const createPayment = async (userId, data) => {
   const { partnerId, paymentType, partnerType, amount, paymentDate, paymentMethod, reference, note } = data;
 
@@ -495,6 +503,7 @@ const handleRazorpayWebhook = async (rawBody, signature) => {
 };
 
 module.exports = {
+  listPayments,
   createPayment,
   allocatePayment,
   createRazorpayOrder,

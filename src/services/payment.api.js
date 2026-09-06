@@ -1,6 +1,7 @@
 import api from '@/lib/apiClient';
 
 export const paymentService = {
+  list: () => api.get('/payments'),
   /** Backend creates the payment already CONFIRMED and posts the journal entry. */
   create: (payload) => api.post('/payments', payload),
   /** Allocation is what moves an invoice / bill to PARTIALLY_PAID or PAID. */

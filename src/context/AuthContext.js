@@ -56,10 +56,10 @@ export function AuthProvider({ children }) {
     };
   }, [clearSession]);
 
-  const login = useCallback(async (loginId, password) => {
+  const login = useCallback(async (loginId, password, remember = true) => {
     const response = await authService.login(loginId, password);
     const { token, user: loggedIn } = response.data;
-    setToken(token);
+    setToken(token, remember);
     setUser(loggedIn);
     return loggedIn;
   }, []);

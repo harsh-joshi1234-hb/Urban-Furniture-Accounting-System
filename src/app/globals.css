@@ -105,6 +105,693 @@ body {
 }
 
 /* ==========================================================================
+   Portal Dashboard
+   Warm, premium card-based dashboard for portal users.
+   ========================================================================== */
+
+.portal-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Hero / Greeting ─────────────────────────────────────────────────── */
+.portal-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+}
+
+.portal-hero-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
+}
+
+.portal-hero-subtitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.portal-quote {
+  text-align: right;
+  max-width: 200px;
+}
+
+.portal-quote-text {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  white-space: pre-line;
+}
+
+.portal-quote-author {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+/* ── Stat Cards ──────────────────────────────────────────────────────── */
+.portal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .portal-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .portal-stats-grid { grid-template-columns: 1fr; }
+}
+
+.portal-stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.portal-stat-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.portal-stat-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.portal-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.portal-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.portal-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.portal-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-value-danger {
+  color: #dc2626;
+}
+
+.portal-stat-bottom {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────── */
+.portal-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.portal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.portal-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.portal-card-subtitle {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.portal-view-all {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brand);
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.portal-view-all:hover {
+  color: var(--brand-hover);
+}
+
+/* ── Legend ───────────────────────────────────────────────────────────── */
+.portal-legend {
+  display: flex;
+  gap: 14px;
+}
+
+.portal-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.portal-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Mid Grid: Overview + Donut + Quick Actions ──────────────────────── */
+.portal-mid-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 0.7fr;
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .portal-mid-grid { grid-template-columns: 1fr 1fr; }
+  .portal-quick-card { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .portal-mid-grid { grid-template-columns: 1fr; }
+}
+
+.portal-overview-chart {
+  padding: 12px 16px 8px;
+}
+
+/* ── Donut Card ──────────────────────────────────────────────────────── */
+.portal-donut-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.portal-donut-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.portal-donut-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-secondary);
+}
+
+.portal-donut-legend-label {
+  min-width: 90px;
+}
+
+.portal-donut-legend-value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-primary);
+}
+
+/* ── Quick Actions ───────────────────────────────────────────────────── */
+.portal-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 16px 16px;
+}
+
+.portal-quick-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-primary);
+  background: var(--surface-sunken);
+  transition: background 0.15s, transform 0.12s;
+}
+
+.portal-quick-btn:hover {
+  background: var(--brand-soft);
+  transform: translateX(3px);
+}
+
+.portal-quick-icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
+}
+
+/* ── Bottom Grid: Invoices + Payments ────────────────────────────────── */
+.portal-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .portal-bottom-grid { grid-template-columns: 1fr; }
+}
+
+.portal-right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Portal Tables ───────────────────────────────────────────────────── */
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.portal-table thead tr {
+  background: var(--surface-sunken);
+}
+
+.portal-table th {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.portal-table td {
+  padding: 10px 16px;
+  color: var(--ink-secondary);
+  border-bottom: 1px solid #f5f1ea;
+}
+
+.portal-table tbody tr:hover {
+  background: #faf6f1;
+}
+
+.portal-table-compact td {
+  padding: 8px 16px;
+}
+
+.portal-table-inv-no {
+  font-weight: 600;
+  color: var(--ink-primary) !important;
+}
+
+.portal-view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brand);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.15s;
+}
+
+.portal-view-btn:hover {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+}
+
+/* ── CTA Card ────────────────────────────────────────────────────────── */
+.portal-cta-card {
+  background: linear-gradient(135deg, #3b2212 0%, #5c3b23 50%, #714829 100%);
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 28px 24px;
+  position: relative;
+}
+
+.portal-cta-card::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.portal-cta-content {
+  position: relative;
+  z-index: 1;
+}
+
+.portal-cta-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.portal-cta-text {
+  margin-top: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+.portal-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b2212;
+  background: #f3e9de;
+  transition: background 0.15s, transform 0.12s;
+}
+
+.portal-cta-btn:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Payment Method Selector (Portal Invoice Detail)
+   ========================================================================== */
+
+.pay-method-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.pay-method-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pay-method-tab:hover {
+  background: var(--surface-sunken);
+  color: var(--ink-primary);
+}
+
+.pay-method-tab-active {
+  color: var(--brand) !important;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  background: var(--surface);
+}
+
+.pay-method-tab-icon {
+  font-size: 18px;
+}
+
+.pay-method-tab-label {
+  font-weight: 600;
+}
+
+.pay-method-desc {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f5f1ea;
+  background: var(--surface-sunken);
+}
+
+.pay-method-body {
+  padding: 20px;
+}
+
+/* ── Payment Form ────────────────────────────────────────────────────── */
+.pay-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pay-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pay-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pay-field-input {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--ink-primary);
+  background: var(--surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.pay-field-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(139, 90, 50, 0.12);
+}
+
+.pay-field-input::placeholder {
+  color: var(--ink-muted);
+  opacity: 0.7;
+}
+
+.pay-field-hint {
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.pay-submit-btn {
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.12s;
+}
+
+.pay-submit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.pay-submit-btn:active {
+  transform: scale(0.98);
+}
+
+.pay-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pay-disclaimer {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.pay-success-box {
+  text-align: center;
+  padding: 24px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.pay-error-box {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+/* ==========================================================================
+   Landing page motion
+   Scroll-reveal plus the shared hover treatments. All of it is switched off
+   for visitors who ask for reduced motion.
+   ========================================================================== */
+/*
+ * Fail-open: content is visible by default and only hidden once the component
+ * has mounted and set data-armed. No JS, no observer, no paint -> still visible.
+ */
+.reveal {
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal[data-armed='true'] {
+  opacity: 0;
+  transform: translateY(22px);
+  will-change: opacity, transform;
+}
+
+.reveal[data-armed='true'].reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Cards that lift and warm their border on hover */
+.hover-lift {
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-brand-200, #e7d3be);
+  box-shadow: var(--shadow-md);
+}
+
+/* Buttons: a small rise plus a sheen that sweeps across on hover */
+.hover-cta {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.hover-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.hover-cta:active {
+  transform: translateY(0);
+}
+
+.hover-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -30%;
+  width: 30%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s ease;
+}
+
+.hover-cta:hover::after {
+  left: 130%;
+}
+
+/* Arrows nudge forward with their button */
+.hover-cta .cta-arrow {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-cta:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal[data-armed='true'] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hover-lift,
+  .hover-cta,
+  .hover-cta .cta-arrow {
+    transition: none;
+  }
+
+  .hover-lift:hover,
+  .hover-cta:hover {
+    transform: none;
+  }
+
+  .hover-cta::after {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    Print / Save as PDF
    Turns a report screen into an A4 document: app chrome, filters and buttons
    drop out, the letterhead and footer appear, and tables repeat their headers

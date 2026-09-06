@@ -1,6 +1,15 @@
 const paymentService = require('../services/payment.service');
 const auditService = require('../services/audit.service');
 
+const getPayments = async (req, res, next) => {
+  try {
+    const payments = await paymentService.listPayments();
+    res.status(200).json({ success: true, data: payments });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createPayment = async (req, res, next) => {
   try {
     const pay = await paymentService.createPayment(req.user.id, req.body);
@@ -77,4 +86,4 @@ const handleRazorpayWebhook = async (req, res, next) => {
   }
 };
 
-module.exports = { createPayment, allocatePayment, createRazorpayOrder, verifyRazorpayPayment, handleRazorpayWebhook };
+module.exports = { getPayments, createPayment, allocatePayment, createRazorpayOrder, verifyRazorpayPayment, handleRazorpayWebhook };
