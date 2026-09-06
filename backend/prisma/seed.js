@@ -157,17 +157,69 @@ async function main() {
 
   // --- DUMMY DATA GENERATION ---
   const { faker } = require('@faker-js/faker');
-  console.log('Generating dummy data...');
+  console.log('Clearing previous demo records...');
+  await prisma.paymentAllocation.deleteMany({});
+  await prisma.paymentGatewayTransaction.deleteMany({});
+  await prisma.payment.deleteMany({});
+  await prisma.customerInvoiceLine.deleteMany({});
+  await prisma.customerInvoice.deleteMany({});
+  await prisma.vendorBillLine.deleteMany({});
+  await prisma.vendorBill.deleteMany({});
+  await prisma.salesOrderLine.deleteMany({});
+  await prisma.salesOrder.deleteMany({});
+  await prisma.purchaseOrderLine.deleteMany({});
+  await prisma.purchaseOrder.deleteMany({});
+  await prisma.journalItem.deleteMany({});
+  await prisma.journalEntry.deleteMany({});
+  await prisma.budget.deleteMany({});
+  await prisma.analyticAccount.deleteMany({});
+  await prisma.product.deleteMany({});
+  await prisma.customerUser.deleteMany({});
+  await prisma.contact.deleteMany({});
+
+  console.log('Generating rich demo data with photos...');
+
+  const CUSTOMER_AVATARS = [
+    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
+    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80',
+    'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&q=80',
+    'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=80',
+    'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&q=80',
+    'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80',
+    'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80',
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80',
+    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80',
+    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80',
+    'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80',
+    'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=200&q=80',
+  ];
+
+  const VENDOR_AVATARS = [
+    'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=200&q=80',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&q=80',
+    'https://images.unsplash.com/photo-1577495508048-b635879837f1?w=200&q=80',
+    'https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=200&q=80',
+    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=200&q=80',
+    'https://images.unsplash.com/photo-1572021335469-31706a17aaef?w=200&q=80',
+    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&q=80',
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?w=200&q=80',
+    'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=200&q=80',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&q=80',
+  ];
 
   // Contacts
   const customers = [];
   for (let i = 0; i < 15; i++) {
     const c = await prisma.contact.create({
       data: {
-        name: faker.company.name(),
+        name: faker.person.fullName() + ' (' + faker.company.name() + ')',
         type: 'CUSTOMER',
-        email: faker.internet.email(),
-        phone: faker.phone.number(),
+        imageUrl: CUSTOMER_AVATARS[i % CUSTOMER_AVATARS.length],
+        email: faker.internet.email().toLowerCase(),
+        phone: '+91 ' + faker.string.numeric(10),
         city: faker.location.city(),
         country: 'India'
       }
@@ -186,10 +238,11 @@ async function main() {
   for (let i = 0; i < 10; i++) {
     const v = await prisma.contact.create({
       data: {
-        name: faker.company.name() + ' Supplier',
+        name: faker.company.name() + ' Timber & Hardware',
         type: 'VENDOR',
-        email: faker.internet.email(),
-        phone: faker.phone.number(),
+        imageUrl: VENDOR_AVATARS[i % VENDOR_AVATARS.length],
+        email: faker.internet.email().toLowerCase(),
+        phone: '+91 ' + faker.string.numeric(10),
         city: faker.location.city(),
         country: 'India'
       }
@@ -199,20 +252,45 @@ async function main() {
 
   // Categories & Products
   const categories = ['Living Room', 'Office Office', 'Bedroom', 'Dining', 'Outdoor'];
-  const dbCats = [];
+  const dbCats = {};
   for (const c of categories) {
-    dbCats.push(await prisma.productCategory.upsert({ where: { name: c }, update: {}, create: { name: c } }));
+    const cat = await prisma.productCategory.upsert({ where: { name: c }, update: {}, create: { name: c } });
+    dbCats[c] = cat.id;
   }
 
+  const FURNITURE_CATALOG = [
+    { name: 'Ergonomic Executive Mesh Chair', category: 'Office Office', image: 'https://images.unsplash.com/photo-1580481077197-2a4f4efb71d9?w=600&q=80', salesPrice: 14500, cost: 7200 },
+    { name: 'Solid Walnut Standing Desk', category: 'Office Office', image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80', salesPrice: 28000, cost: 14000 },
+    { name: 'Nordic Velvet 3-Seater Sofa', category: 'Living Room', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80', salesPrice: 42000, cost: 21000 },
+    { name: 'Scandinavian Oak Dining Table', category: 'Dining', image: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?w=600&q=80', salesPrice: 32000, cost: 16000 },
+    { name: 'Modern Upholstered Queen Bed', category: 'Bedroom', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&q=80', salesPrice: 38000, cost: 19000 },
+    { name: 'Industrial Teak Patio Dining Set', category: 'Outdoor', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80', salesPrice: 49000, cost: 24500 },
+    { name: 'Mid-Century Leather Lounge Armchair', category: 'Living Room', image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80', salesPrice: 18500, cost: 9200 },
+    { name: 'Minimalist Oak Bookshelf', category: 'Living Room', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80', salesPrice: 16000, cost: 8000 },
+    { name: 'Ceramic Top Nesting Coffee Tables', category: 'Living Room', image: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=600&q=80', salesPrice: 12500, cost: 6200 },
+    { name: 'Velvet Cushioned Dining Chairs (Pair)', category: 'Dining', image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80', salesPrice: 11000, cost: 5500 },
+    { name: 'Solid Wood 2-Drawer Nightstand', category: 'Bedroom', image: 'https://images.unsplash.com/photo-1532372320572-cda25653a26d?w=600&q=80', salesPrice: 7500, cost: 3800 },
+    { name: 'Adjustable Steel Swivel Barstool', category: 'Dining', image: 'https://images.unsplash.com/photo-1503602642458-232111445657?w=600&q=80', salesPrice: 6500, cost: 3200 },
+    { name: 'Modular Sectional Corner Couch', category: 'Living Room', image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80', salesPrice: 56000, cost: 28000 },
+    { name: 'Contemporary Sliding Credenza', category: 'Living Room', image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600&q=80', salesPrice: 22000, cost: 11000 },
+    { name: 'High-Back Ergonomic Task Chair', category: 'Office Office', image: 'https://images.unsplash.com/photo-1589834390005-5d4fb9bf3d32?w=600&q=80', salesPrice: 13500, cost: 6800 },
+    { name: '6-Door Wardrobe with Mirror', category: 'Bedroom', image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80', salesPrice: 45000, cost: 22500 },
+    { name: 'All-Weather Rattan Sun Lounger', category: 'Outdoor', image: 'https://images.unsplash.com/photo-1519643381401-22c77e60520e?w=600&q=80', salesPrice: 19500, cost: 9800 },
+    { name: 'Compact Home Office Workstation', category: 'Office Office', image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=600&q=80', salesPrice: 21000, cost: 10500 },
+    { name: 'Round Marble Bistro Dining Table', category: 'Dining', image: 'https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=600&q=80', salesPrice: 26000, cost: 13000 },
+    { name: 'Outdoor Garden Bench with Cushion', category: 'Outdoor', image: 'https://images.unsplash.com/photo-1565183997392-2f6f122e5912?w=600&q=80', salesPrice: 14000, cost: 7000 },
+  ];
+
   const products = [];
-  for (let i = 0; i < 30; i++) {
+  for (const item of FURNITURE_CATALOG) {
     const p = await prisma.product.create({
       data: {
-        name: faker.commerce.productName() + ' ' + faker.commerce.productAdjective(),
-        categoryId: faker.helpers.arrayElement(dbCats).id,
+        name: item.name,
+        imageUrl: item.image,
+        categoryId: dbCats[item.category] || Object.values(dbCats)[0],
         productType: 'GOODS',
-        salesPrice: faker.commerce.price({ min: 1000, max: 20000 }),
-        cost: faker.commerce.price({ min: 500, max: 9000 }),
+        salesPrice: item.salesPrice,
+        cost: item.cost,
         isActive: true
       }
     });
