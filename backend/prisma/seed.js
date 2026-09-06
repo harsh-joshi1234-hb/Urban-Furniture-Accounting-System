@@ -257,8 +257,8 @@ async function main() {
   const seq = { INV: 0, BILL: 0, PAY: 0, SALES: 0, PURCHASE: 0, BANK: 0 };
   const nextNumber = (prefix) => `${prefix}/2026/${String((seq[prefix] += 1)).padStart(4, '0')}`;
 
-  for (let i = 0; i < 40; i++) {
-    const isSales = i < 25; // 25 Invoices, 15 Bills
+  for (let i = 0; i < 100; i++) {
+    const isSales = i < 65; // 65 Invoices, 35 Bills
     const date = faker.date.recent({ days: 60 });
     const contact = isSales ? faker.helpers.arrayElement(customers) : faker.helpers.arrayElement(vendors);
     const prod = faker.helpers.arrayElement(products);
