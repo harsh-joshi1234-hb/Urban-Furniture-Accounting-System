@@ -38,11 +38,12 @@ export default function Sidebar({ role, open, onClose }) {
   };
 
   const content = (
-    <nav className="flex h-full flex-col gap-4 overflow-y-auto px-3 py-4">
-      <Link
-        href={role === 'USER' ? '/portal' : '/dashboard'}
-        className="mb-1 flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition hover:bg-white/5"
-      >
+    <div className="flex h-full flex-col">
+      <div className="px-3 pt-4 pb-2">
+        <Link
+          href={role === 'USER' ? '/portal' : '/dashboard'}
+          className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition hover:bg-white/5"
+        >
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-xs font-bold text-white shadow-sm">
           UF
         </span>
@@ -52,9 +53,11 @@ export default function Sidebar({ role, open, onClose }) {
           </span>
           <span className="block truncate text-[11px] text-stone-400">Accounting System</span>
         </span>
-      </Link>
+        </Link>
+      </div>
 
-      {groups.map((group) => {
+      <nav className="scrollbar-hide flex-1 overflow-y-auto px-3 pb-4 flex flex-col gap-4">
+        {groups.map((group) => {
         const isCollapsed = !!collapsedGroups[group.label];
         const isOpen = !isCollapsed;
 
@@ -103,6 +106,7 @@ export default function Sidebar({ role, open, onClose }) {
         );
       })}
     </nav>
+  </div>
   );
 
   return (

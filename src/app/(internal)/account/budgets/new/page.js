@@ -93,7 +93,7 @@ export default function NewBudgetPage() {
   }
 
   return (
-    <div className="max-w-3xl">
+    <div className="mx-auto max-w-3xl">
       <PageHeader
         title="New budget"
         subtitle="Saved as a draft. Confirm it to start tracking achievement."

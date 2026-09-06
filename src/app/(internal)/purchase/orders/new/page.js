@@ -77,7 +77,7 @@ export default function NewPurchaseOrderPage() {
   }
 
   return (
-    <div className="max-w-5xl">
+    <div className="mx-auto max-w-5xl">
       <PageHeader
         title="New purchase order"
         backHref="/purchase/orders"

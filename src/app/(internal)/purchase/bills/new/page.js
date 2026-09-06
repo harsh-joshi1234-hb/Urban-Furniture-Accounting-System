@@ -95,7 +95,7 @@ export default function NewVendorBillPage() {
   const accountOptions = expenseAccounts.length > 0 ? expenseAccounts : accounts.data ?? [];
 
   return (
-    <div className="max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader title="New vendor bill" backHref="/purchase/bills" backLabel="Vendor bills" />
 
       <form onSubmit={onSubmit} noValidate className="space-y-4">

@@ -18,7 +18,7 @@ export default function PortalProfilePage() {
   ];
 
   return (
-    <div className="max-w-2xl">
+    <div className="mx-auto max-w-2xl">
       <PageHeader title="Profile" subtitle="Your account details." />
 
       <Card bodyClassName="p-4">

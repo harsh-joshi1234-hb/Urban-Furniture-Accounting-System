@@ -31,7 +31,7 @@ export default function NewProductPage() {
   }
 
   return (
-    <div className="max-w-4xl">
+    <div className="mx-auto max-w-4xl">
       <PageHeader title="New product" backHref="/account/products" backLabel="Products" />
       <ProductForm
         categories={categories.data ?? []}

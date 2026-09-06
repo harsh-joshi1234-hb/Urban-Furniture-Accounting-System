@@ -34,7 +34,7 @@ export default function BalanceSheetPage() {
   const asOfLabel = asOfDate ? `As at ${formatDate(asOfDate)}` : 'All posted entries to date';
 
   return (
-    <div className="max-w-5xl">
+    <div className="mx-auto max-w-5xl">
       <div className="print:hidden">
         <PageHeader
           title="Balance Sheet"

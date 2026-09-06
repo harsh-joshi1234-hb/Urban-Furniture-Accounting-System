@@ -27,7 +27,7 @@ export default function AccountDetailPage() {
   const acc = account.data;
 
   return (
-    <div className="max-w-4xl">
+    <div className="mx-auto max-w-4xl">
       <PageHeader
         title={`${acc.code} - ${acc.name}`}
         subtitle={titleCase(acc.type)}

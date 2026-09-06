@@ -158,7 +158,7 @@ export default function BudgetDetailPage() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className="mx-auto max-w-4xl">
       <PageHeader
         title={doc.name}
         subtitle={`${doc.analyticAccount?.name || ''} - ${formatDate(doc.startDate)} to ${formatDate(doc.endDate)}`}

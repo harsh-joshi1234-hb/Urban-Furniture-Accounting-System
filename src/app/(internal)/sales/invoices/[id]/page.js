@@ -101,7 +101,7 @@ export default function InvoiceDetailPage() {
   };
 
   return (
-    <div className="max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader
         title={inv.number}
         subtitle={`${inv.customer?.name || ''} - ${formatDate(inv.invoiceDate)}`}

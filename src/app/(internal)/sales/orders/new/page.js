@@ -77,7 +77,7 @@ export default function NewSalesOrderPage() {
   }
 
   return (
-    <div className="max-w-5xl">
+    <div className="mx-auto max-w-5xl">
       <PageHeader title="New sales order" backHref="/sales/orders" backLabel="Sales orders" />
 
       <form onSubmit={onSubmit} noValidate className="space-y-4">

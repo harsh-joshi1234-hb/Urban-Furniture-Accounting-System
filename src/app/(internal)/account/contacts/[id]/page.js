@@ -44,7 +44,7 @@ export default function ContactDetailPage() {
   if (!data) return <ErrorState error={{ status: 404, message: 'Contact not found' }} />;
 
   return (
-    <div className="max-w-4xl">
+    <div className="mx-auto max-w-4xl">
       <PageHeader
         title={data.name}
         subtitle={data.type === 'CUSTOMER' ? 'Customer' : 'Vendor'}

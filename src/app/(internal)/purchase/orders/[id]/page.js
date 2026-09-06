@@ -99,7 +99,7 @@ export default function PurchaseOrderDetailPage() {
   };
 
   return (
-    <div className="max-w-5xl">
+    <div className="mx-auto max-w-5xl">
       <PageHeader
         title={po.number}
         subtitle={`${po.vendor?.name || ''} - ${formatDate(po.orderDate)}`}

@@ -95,7 +95,7 @@ export default function NewInvoicePage() {
   const accountOptions = incomeAccounts.length > 0 ? incomeAccounts : accounts.data ?? [];
 
   return (
-    <div className="max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader title="New customer invoice" backHref="/sales/invoices" backLabel="Invoices" />
 
       <form onSubmit={onSubmit} noValidate className="space-y-4">

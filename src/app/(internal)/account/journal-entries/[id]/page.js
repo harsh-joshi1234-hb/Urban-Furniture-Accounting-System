@@ -137,7 +137,7 @@ export default function JournalEntryDetailPage() {
   const href = sourceHref(doc);
 
   return (
-    <div className="max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader
         title={doc.number}
         subtitle={`${doc.journal?.name || ''} - ${formatDate(doc.accountingDate)}`}

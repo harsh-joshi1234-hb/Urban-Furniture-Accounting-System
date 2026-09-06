@@ -95,6 +95,14 @@ body {
   scrollbar-width: thin;
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .table-scroll::-webkit-scrollbar {
   height: 8px;
 }

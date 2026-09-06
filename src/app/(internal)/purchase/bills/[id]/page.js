@@ -100,7 +100,7 @@ export default function VendorBillDetailPage() {
   };
 
   return (
-    <div className="max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader
         title={doc.number}
         subtitle={`${doc.vendor?.name || ''} - ${formatDate(doc.billDate)}`}

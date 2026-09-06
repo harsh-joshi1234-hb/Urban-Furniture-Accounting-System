@@ -97,7 +97,7 @@ export default function SalesOrderDetailPage() {
   };
 
   return (
-    <div className="max-w-5xl">
+    <div className="mx-auto max-w-5xl">
       <PageHeader
         title={so.number}
         subtitle={`${so.customer?.name || ''} - ${formatDate(so.orderDate)}`}

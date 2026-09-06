@@ -47,7 +47,7 @@ export default function AnalyticAccountDetailPage() {
   if (!data) return <ErrorState error={{ status: 404, message: 'Analytic account not found' }} />;
 
   return (
-    <div className="max-w-3xl">
+    <div className="mx-auto max-w-3xl">
       <PageHeader
         title={data.name}
         subtitle={data.type}

@@ -22,7 +22,7 @@ export default function NewAnalyticAccountPage() {
   );
 
   return (
-    <div className="max-w-3xl">
+    <div className="mx-auto max-w-3xl">
       <PageHeader
         title="New analytic account"
         backHref="/account/analyticals"

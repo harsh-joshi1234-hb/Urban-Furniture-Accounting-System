@@ -92,7 +92,7 @@ export default function NewJournalEntryPage() {
   }
 
   return (
-    <div className="max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader
         title="New journal entry"
         subtitle="Saved as a draft. Posting is a separate step and requires a balanced entry."

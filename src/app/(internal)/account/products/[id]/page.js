@@ -45,7 +45,7 @@ export default function ProductDetailPage() {
   if (!product.data) return <ErrorState error={{ status: 404, message: 'Product not found' }} />;
 
   return (
-    <div className="max-w-4xl">
+    <div className="mx-auto max-w-4xl">
       <PageHeader
         title={product.data.name}
         subtitle={product.data.category?.name}
