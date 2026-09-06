@@ -16,6 +16,7 @@ import ErrorState, { FormError } from '@/components/ui/ErrorState';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import DocumentLines from '@/components/DocumentLines';
 import PaymentDialog from '@/components/forms/PaymentDialog';
+import PortalAccessCard from '@/components/forms/PortalAccessCard';
 import { TextField } from '@/components/ui/Field';
 import useSubmit from '@/hooks/useSubmit';
 import { useToast } from '@/context/ToastContext';
@@ -257,6 +258,16 @@ export default function InvoiceDetailPage() {
           </p>
         )}
       </Card>
+
+      {/* Portal visibility is granted on the customer, so it is editable from here too. */}
+      {inv.customer?.id ? (
+        <PortalAccessCard
+          contactId={inv.customer.id}
+          contactName={inv.customer.name}
+          title="Who can see this invoice"
+          subtitle={`Portal accounts with access to ${inv.customer.name}`}
+        />
+      ) : null}
 
       <PaymentDialog
         open={payOpen}

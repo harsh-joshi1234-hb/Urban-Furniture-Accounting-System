@@ -6,7 +6,7 @@ const auditService = require('./audit.service');
 
 async function generatePaymentNumber() {
   const latest = await prisma.payment.findFirst({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { number: 'desc' }
   });
   if (!latest) return 'PAY/2026/0001';
   

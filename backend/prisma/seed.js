@@ -1,6 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
-const { faker } = require('@faker-js/faker');
 
 const prisma = new PrismaClient();
 
@@ -10,6 +9,7 @@ const ALL_PERMISSIONS = [
   { code: 'user.read', name: 'Read User', module: 'Auth' },
   { code: 'user.update', name: 'Update User', module: 'Auth' },
   { code: 'user.deactivate', name: 'Deactivate User', module: 'Auth' },
+  { code: 'user.delete', name: 'Delete User', module: 'Auth' },
   // Sales Orders
   { code: 'sales_order.create', name: 'Create Sales Order', module: 'Sales' },
   { code: 'sales_order.read', name: 'Read Sales Order', module: 'Sales' },
@@ -48,6 +48,11 @@ const ALL_PERMISSIONS = [
   { code: 'journal.read', name: 'Read Journal', module: 'Accounting' },
   { code: 'journal.post', name: 'Post Journal', module: 'Accounting' },
   { code: 'journal.cancel', name: 'Cancel Journal', module: 'Accounting' },
+  // Journal Entries - required by src/routes/journalEntry.routes.js
+  { code: 'journal_entry.create', name: 'Create Journal Entry', module: 'Accounting' },
+  { code: 'journal_entry.read', name: 'Read Journal Entry', module: 'Accounting' },
+  { code: 'journal_entry.post', name: 'Post Journal Entry', module: 'Accounting' },
+  { code: 'journal_entry.cancel', name: 'Cancel Journal Entry', module: 'Accounting' },
   // Budgets
   { code: 'budget.create', name: 'Create Budget', module: 'Budget' },
   { code: 'budget.read', name: 'Read Budget', module: 'Budget' },
@@ -96,10 +101,12 @@ async function main() {
   }
 
   // 2. Users
+  // Passwords come from the environment in a real deployment. The defaults are
+  // the local development credentials - always override them in production.
   const users = [
-    { loginId: 'admin001', email: 'admin@example.com', name: 'System Admin', password: 'Admin@12345', roleId: adminRole.id },
-    { loginId: 'accountant001', email: 'accountant@example.com', name: 'System Accountant', password: 'Accountant@12345', roleId: accountantRole.id },
-    { loginId: 'user001', email: 'user@example.com', name: 'Portal User', password: 'User@12345', roleId: userRole.id },
+    { loginId: 'admin001', email: process.env.SEED_ADMIN_EMAIL || 'admin@example.com', name: 'System Admin', password: process.env.SEED_ADMIN_PASSWORD || 'Admin@12345', roleId: adminRole.id },
+    { loginId: 'accountant001', email: process.env.SEED_ACCOUNTANT_EMAIL || 'accountant@example.com', name: 'System Accountant', password: process.env.SEED_ACCOUNTANT_PASSWORD || 'Accountant@12345', roleId: accountantRole.id },
+    { loginId: 'user001', email: process.env.SEED_USER_EMAIL || 'user@example.com', name: 'Portal User', password: process.env.SEED_USER_PASSWORD || 'User@12345', roleId: userRole.id },
   ];
 
   let adminUser;
@@ -119,11 +126,37 @@ async function main() {
   const receivableAccount = await prisma.chartOfAccount.upsert({ where: { code: '120000' }, update: {}, create: { code: '120000', name: 'Accounts Receivable', type: 'ASSET' } });
   const payableAccount = await prisma.chartOfAccount.upsert({ where: { code: '210000' }, update: {}, create: { code: '210000', name: 'Accounts Payable', type: 'LIABILITY' } });
 
-  const salesJournal = await prisma.journal.upsert({ where: { id: 'default-sales' }, update: {}, create: { id: 'default-sales', name: 'Sales Journal', type: 'SALES', defaultAccountId: salesAccount.id } });
-  const purchaseJournal = await prisma.journal.upsert({ where: { id: 'default-purchase' }, update: {}, create: { id: 'default-purchase', name: 'Purchase Journal', type: 'PURCHASE', defaultAccountId: expenseAccount.id } });
-  const bankJournal = await prisma.journal.upsert({ where: { id: 'default-bank' }, update: {}, create: { id: 'default-bank', name: 'Bank Journal', type: 'BANK', defaultAccountId: bankAccount.id } });
+  // Ids are left to Prisma so each journal gets a real UUID - the journal-entry
+  // validator requires a GUID, so hardcoded ids produce journals that cannot be
+  // used for manual entries.
+  const ensureJournal = async (type, name, defaultAccountId) => {
+    const existing = await prisma.journal.findFirst({ where: { type } });
+    if (existing) return existing;
+    return prisma.journal.create({ data: { name, type, defaultAccountId } });
+  };
+
+  const salesJournal = await ensureJournal('SALES', 'Sales Journal', salesAccount.id);
+  const purchaseJournal = await ensureJournal('PURCHASE', 'Purchase Journal', expenseAccount.id);
+  const bankJournal = await ensureJournal('BANK', 'Bank Journal', bankAccount.id);
+  await ensureJournal('CASH', 'Cash Journal', bankAccount.id);
+
+  // ---------------------------------------------------------------------
+  // Everything above is the minimum a deployment needs: permissions, roles,
+  // sign-in accounts, the chart of accounts and the system journals. It is all
+  // idempotent, so re-running is safe.
+  //
+  // Everything below is demo data for local development. It is skipped unless
+  // SEED_DEMO_DATA=true, so a production database never gets invented
+  // contacts, invoices or payments.
+  // ---------------------------------------------------------------------
+  if (process.env.SEED_DEMO_DATA !== 'true') {
+    console.log('Core seed complete (roles, users, chart of accounts, journals).');
+    console.log('Set SEED_DEMO_DATA=true to also generate demo records.');
+    return;
+  }
 
   // --- DUMMY DATA GENERATION ---
+  const { faker } = require('@faker-js/faker');
   console.log('Generating dummy data...');
 
   // Contacts
@@ -219,6 +252,11 @@ async function main() {
   let payCounter = 1;
   let billCounter = 1;
   
+  // Document numbers must follow the same scheme the services generate
+  // (PREFIX/2026/0001), or the next generated number collides with a seeded one.
+  const seq = { INV: 0, BILL: 0, PAY: 0, SALES: 0, PURCHASE: 0, BANK: 0 };
+  const nextNumber = (prefix) => `${prefix}/2026/${String((seq[prefix] += 1)).padStart(4, '0')}`;
+
   for (let i = 0; i < 40; i++) {
     const isSales = i < 25; // 25 Invoices, 15 Bills
     const date = faker.date.recent({ days: 60 });
@@ -233,7 +271,7 @@ async function main() {
       // 1. Customer Invoice
       const inv = await prisma.customerInvoice.create({
         data: {
-          number: `INV/2026/${faker.string.alphanumeric(8).toUpperCase()}`,
+          number: nextNumber('INV'),
           customerId: contact.id,
           invoiceDate: date,
           dueDate: faker.date.soon({ days: 30, refDate: date }),
@@ -256,7 +294,7 @@ async function main() {
       // 2. Sales Journal Entry (AR Debit, Sales Credit)
       const je = await prisma.journalEntry.create({
         data: {
-          number: `JE-SALES/${faker.string.alphanumeric(8).toUpperCase()}`,
+          number: nextNumber('SALES'),
           journalId: salesJournal.id,
           partnerId: contact.id,
           accountingDate: date,
@@ -282,7 +320,7 @@ async function main() {
         const payDate = faker.date.soon({ days: 10, refDate: date });
         const pay = await prisma.payment.create({
           data: {
-            number: `PAY/${faker.string.alphanumeric(8).toUpperCase()}`,
+            number: nextNumber('PAY'),
             paymentType: 'RECEIVE',
             partnerType: 'CUSTOMER',
             partnerId: contact.id,
@@ -308,7 +346,7 @@ async function main() {
         // Bank Journal Entry (Bank Debit, AR Credit)
         await prisma.journalEntry.create({
           data: {
-            number: `JE-BANK/${faker.string.alphanumeric(8).toUpperCase()}`,
+            number: nextNumber('BANK'),
             journalId: bankJournal.id,
             partnerId: contact.id,
             accountingDate: payDate,
@@ -334,7 +372,7 @@ async function main() {
       const billAnalyticId = faker.helpers.arrayElement(analytics).id;
       const bill = await prisma.vendorBill.create({
         data: {
-          number: `BILL/2026/${faker.string.alphanumeric(8).toUpperCase()}`,
+          number: nextNumber('BILL'),
           vendorId: contact.id,
           billDate: date,
           dueDate: faker.date.soon({ days: 30, refDate: date }),
@@ -358,7 +396,7 @@ async function main() {
       // Purchase Journal Entry (Expense Debit, AP Credit)
       const je = await prisma.journalEntry.create({
         data: {
-          number: `JE-PURCH/${faker.string.alphanumeric(8).toUpperCase()}`,
+          number: nextNumber('PURCHASE'),
           journalId: purchaseJournal.id,
           partnerId: contact.id,
           accountingDate: date,
@@ -383,7 +421,7 @@ async function main() {
         const payDate = faker.date.soon({ days: 10, refDate: date });
         const pay = await prisma.payment.create({
           data: {
-            number: `PAY/${faker.string.alphanumeric(8).toUpperCase()}`,
+            number: nextNumber('PAY'),
             paymentType: 'SEND',
             partnerType: 'VENDOR',
             partnerId: contact.id,
@@ -409,7 +447,7 @@ async function main() {
         // Bank Journal Entry (AP Debit, Bank Credit)
         await prisma.journalEntry.create({
           data: {
-            number: `JE-BANK/${faker.string.alphanumeric(8).toUpperCase()}`,
+            number: nextNumber('BANK'),
             journalId: bankJournal.id,
             partnerId: contact.id,
             accountingDate: payDate,

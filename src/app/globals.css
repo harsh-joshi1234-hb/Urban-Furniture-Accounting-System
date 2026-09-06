@@ -819,19 +819,49 @@ body {
     /* Keep chart fills and status colours in the PDF */
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
   }
 
-  *,
-  *::before,
-  *::after {
+  /* Hide all scrollbars in print / PDF output across all browsers */
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     box-shadow: none !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  /* Reset outer shell and any scrolling containers */
+  .h-screen,
+  .overflow-hidden,
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .table-scroll,
+  .flex-1 {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    overflow: visible !important;
   }
 
   /* The report body fills the page - no app padding, no rounded cards */
   main {
     padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .report-document,
+  .report-document * {
+    overflow: visible !important;
   }
 
   .report-document [class*="rounded-"] {

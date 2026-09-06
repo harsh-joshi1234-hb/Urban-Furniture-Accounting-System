@@ -2,7 +2,7 @@ const prisma = require('../config/prisma');
 
 async function generatePONumber() {
   const latest = await prisma.purchaseOrder.findFirst({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { number: 'desc' }
   });
   if (!latest) return 'PO/2026/0001';
   

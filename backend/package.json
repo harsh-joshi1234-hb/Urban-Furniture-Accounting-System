@@ -6,7 +6,14 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma generate",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:status": "prisma migrate status",
+    "seed": "node prisma/seed.js",
+    "seed:demo": "node -e \"process.env.SEED_DEMO_DATA='true';require('./prisma/seed.js')\"",
+    "db:setup": "prisma migrate deploy && node prisma/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -32,5 +39,8 @@
   },
   "prisma": {
     "seed": "node prisma/seed.js"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

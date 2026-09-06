@@ -3,7 +3,7 @@ const accountingService = require('./accounting.service');
 
 async function generateBillNumber() {
   const latest = await prisma.vendorBill.findFirst({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { number: 'desc' }
   });
   if (!latest) return 'BILL/2026/0001';
   

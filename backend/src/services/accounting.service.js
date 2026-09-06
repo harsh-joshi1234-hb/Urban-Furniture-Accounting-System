@@ -68,7 +68,7 @@ const getJournalById = async (id) => {
 async function generateEntryNumber(type) {
   const latest = await prisma.journalEntry.findFirst({
     where: { number: { startsWith: `${type}/2026/` } },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { number: 'desc' }
   });
   if (!latest) return `${type}/2026/0001`;
   const lastNumStr = latest.number.split('/').pop();

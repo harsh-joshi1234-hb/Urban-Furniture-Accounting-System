@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useApiResource } from '@/hooks/useApiResource';
 import contactService from '@/services/contact.api';
 import ContactForm from '@/components/forms/ContactForm';
+import PortalAccessCard from '@/components/forms/PortalAccessCard';
 import PageHeader from '@/components/ui/PageHeader';
 import Button from '@/components/ui/Button';
 import Loading from '@/components/ui/Loading';
@@ -64,6 +65,11 @@ export default function ContactDetailPage() {
         error={update.error}
         onCancel={() => router.push('/account/contacts')}
       />
+
+      {/* Portal access only applies to customers - vendors have no portal. */}
+      {data.type === 'CUSTOMER' && (
+        <PortalAccessCard contactId={data.id} contactName={data.name} />
+      )}
 
       <ConfirmDialog
         open={confirmDelete}

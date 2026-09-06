@@ -3,7 +3,7 @@ const accountingService = require('./accounting.service');
 
 async function generateInvoiceNumber() {
   const latest = await prisma.customerInvoice.findFirst({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { number: 'desc' }
   });
   if (!latest) return 'INV/2026/0001';
   

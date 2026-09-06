@@ -3,7 +3,7 @@ const prisma = require('../config/prisma');
 // Utility to generate SO numbers
 async function generateSONumber() {
   const latest = await prisma.salesOrder.findFirst({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { number: 'desc' }
   });
   if (!latest) return 'SO/2026/0001';
   
