@@ -332,11 +332,11 @@ async function main() {
   
   // Document numbers must follow the same scheme the services generate
   // (PREFIX/2026/0001), or the next generated number collides with a seeded one.
-  const seq = { INV: 0, BILL: 0, PAY: 0, SALES: 0, PURCHASE: 0, BANK: 0 };
+  const seq = { INV: 0, BILL: 0, PAY: 0, SALES: 0, PURCHASE: 0, BANK: 0, SO: 0, PO: 0 };
   const nextNumber = (prefix) => `${prefix}/2026/${String((seq[prefix] += 1)).padStart(4, '0')}`;
 
   for (let i = 0; i < 100; i++) {
-    const isSales = i < 65; // 65 Invoices, 35 Bills
+    const isSales = i < 65; // 65 Sales / Invoices, 35 Purchases / Bills
     const date = faker.date.recent({ days: 60 });
     const contact = isSales ? faker.helpers.arrayElement(customers) : faker.helpers.arrayElement(vendors);
     const prod = faker.helpers.arrayElement(products);
@@ -346,10 +346,32 @@ async function main() {
     const isPaid = faker.datatype.boolean(0.7); // 70% chance of being paid
 
     if (isSales) {
+      // 0. Sales Order
+      const soDate = faker.date.recent({ days: 5, refDate: date });
+      const so = await prisma.salesOrder.create({
+        data: {
+          number: nextNumber('SO'),
+          customerId: contact.id,
+          orderDate: soDate,
+          status: 'CONFIRMED',
+          createdBy: adminUser.id,
+          createdAt: soDate,
+          lines: {
+            create: [{
+              productId: prod.id,
+              quantity: qty,
+              unitPrice: price,
+              total: total
+            }]
+          }
+        }
+      });
+
       // 1. Customer Invoice
       const inv = await prisma.customerInvoice.create({
         data: {
           number: nextNumber('INV'),
+          salesOrderId: so.id,
           customerId: contact.id,
           invoiceDate: date,
           dueDate: faker.date.soon({ days: 30, refDate: date }),
@@ -446,11 +468,34 @@ async function main() {
         jeCounter++;
       }
     } else {
-      // Vendor Bill
+      // 0. Purchase Order
+      const poDate = faker.date.recent({ days: 5, refDate: date });
       const billAnalyticId = faker.helpers.arrayElement(analytics).id;
+      const po = await prisma.purchaseOrder.create({
+        data: {
+          number: nextNumber('PO'),
+          vendorId: contact.id,
+          orderDate: poDate,
+          status: 'CONFIRMED',
+          createdBy: adminUser.id,
+          createdAt: poDate,
+          lines: {
+            create: [{
+              productId: prod.id,
+              quantity: qty,
+              unitPrice: price,
+              total: total,
+              analyticAccountId: billAnalyticId
+            }]
+          }
+        }
+      });
+
+      // 1. Vendor Bill
       const bill = await prisma.vendorBill.create({
         data: {
           number: nextNumber('BILL'),
+          purchaseOrderId: po.id,
           vendorId: contact.id,
           billDate: date,
           dueDate: faker.date.soon({ days: 30, refDate: date }),
